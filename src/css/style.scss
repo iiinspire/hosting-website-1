@@ -1,0 +1,52 @@
+@import 'flex';
+@import 'box';
+@import 'pos';
+@import 'text';
+@import 'color';
+@import 'anim';
+
+$color1: #4A96FA;
+body {
+	box-sizing: border-box;
+	font-family: Helvetica, Arial, sans-serif;
+	.v-application .primary {
+		background-color: $color1 !important;
+		border-color: $color1 !important;
+	}
+	.v-slide-group__next, .v-slide-group__prev {
+		display: none!important;
+	}
+}
+.color-1 {
+	color: $color1;
+}
+.v-main {
+	background: linear-gradient(90deg, #fff, #e0e7f2 10%,#fff 70%, #f7ecec);
+}
+.v-btn, .v-tab {
+	text-transform: none;
+}
+
+.shadow-1 {
+	box-shadow: 0 1px 2px #f0f0f0;
+}
+
+.wrap-0 {
+	width: 100%;
+	padding: 40px 0;
+}
+.wrap-1 {
+	width: 100%;
+	padding: 40px 20px;
+}
+.con-1 {
+	max-width: 1100px;
+	margin: 0 auto;
+}
+.con-2 {
+	max-width: 900px;
+	margin: 0 auto;
+}
+
+.ml-auto { margin-left: auto; }
+.fl-r { float: right;}
