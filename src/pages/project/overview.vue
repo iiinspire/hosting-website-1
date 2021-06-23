@@ -1,19 +1,15 @@
 <style>
-.o-bg-h1 {
-	height: 120px;
-	background: linear-gradient(135deg, #0d217d, #071156 70%, #080d3a);
-}
 </style>
 
 <template>
 <div>
 	<v-card outlined>
-		<div class="pos-r o-bg-h1">
+		<div class="pos-r bg-proj-1">
 			<div class="y-center w100p d-flex al-c pd-20">
 				<div class="white-0">
 					<div class="fz-18">demo-app</div>
-					<div class="mt-1 d-flex al-c">
-						<v-icon color="#fff">mdi-github</v-icon>
+					<div class="mt-1 d-flex al-c fz-14">
+						<v-icon color="#fff" size="18">mdi-github</v-icon>
 						<span class="op-5 ml-1">demo/demo-app</span>
 					</div>
 				</div>
