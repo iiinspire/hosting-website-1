@@ -44,10 +44,27 @@
 
 <script>
 export default {
+	data() {
+		return {
+			list: null,
+		}
+	},
+	mounted() {
+		this.getList()
+	},
 	methods: {
 		onVisit() {
 			this.$alert('develop')
-		}
-	}
+		},
+		async getList() {
+			try {
+				const { data } = await this.$http.get('/repo/list')
+				this.list = data
+				console.log(data)
+			} catch (error) {
+				// 
+			}
+		},
+	},
 }
 </script>
