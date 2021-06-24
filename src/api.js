@@ -31,9 +31,9 @@ http.interceptors.response.use(res => {
 	}
 	return res
 }, error => {
-	const { data = {}, status, statusText } = error.response || {}
+	const { config = {},  data = {}, status, statusText } = error.response || {}
 	// console.log(status, statusText)
-	let msg = data.msg || statusText || (status ? `${status} error` : error.message)
+	let msg = data.msg || statusText || (status ? `${config.url}：${status}` : error.message)
 	if(status == 401) {
 		Vue.prototype.$router.replace('/')
 	}

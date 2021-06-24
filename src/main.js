@@ -8,8 +8,7 @@ import './components'
 import './api'
 
 Vue.prototype.$openWindow = (url) => {
-	window.open(url, 'n1',
-		'height=600,width=900,top=50,left=200,toolbar=no,menubar=no') 
+	window.open(url, 'n1', 'height=600,width=900,top=50,left=200,toolbar=no,menubar=no') 
 }
 
 Vue.config.productionTip = false
@@ -20,5 +19,21 @@ new Vue({
 	router,
 	store,
 	vuetify,
-	render: h => h(App)
+	render: h => h(App),
+	mounted() {
+		this.onInit()
+	},
+	methods: {
+		async onInit() {
+			const now = Date.now()
+			if(localStorage.token && now - localStorage.refreshAt > 2*3600e3) {
+				try {
+					await this.$http.get('/githubapp/refresh')
+					localStorage.refreshAt = now
+				} catch (error) {
+					console.log(error.response)
+				}
+			}
+		},
+	},
 }).$mount('#app')

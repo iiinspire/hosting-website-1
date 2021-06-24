@@ -19,15 +19,19 @@
 <script>
 export default {
 	mounted() {
-		const { token } = this.$route.query
-		if(token) {
-			localStorage.token = token
-		}
-		if(localStorage.token) {
-			this.$router.replace('/dashboard/projects')
-		}
+		this.onInit()
 	},
 	methods: {
+		async onInit() {
+			const { token } = this.$route.query
+			if(token) {
+				localStorage.token = token
+				localStorage.refreshAt = Date.now()
+			}
+			if(localStorage.token) {
+				this.$router.replace('/dashboard/projects')
+			}
+		},
 		async onLogin() {
 			try {
 				this.$loading('loading', {
