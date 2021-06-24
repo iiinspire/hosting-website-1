@@ -8,7 +8,8 @@ import './components'
 import './api'
 
 Vue.prototype.$openWindow = (url) => {
-	window.open(url, 'n1', 'height=600,width=900,top=50,left=200,toolbar=no,menubar=no') 
+	if(store.state.isTouch) location.href = url
+	else window.open(url, 'n1', 'height=600,width=900,top=50,left=200,toolbar=no,menubar=no') 
 }
 
 Vue.config.productionTip = false

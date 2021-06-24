@@ -22,6 +22,7 @@ import { mapState } from 'vuex'
 export default {
 	computed: {
 		...mapState({
+			isTouch: s => s.isTouch,
 			isFoucs: s => s.isFoucs,
 		}),
 	},
@@ -43,9 +44,12 @@ export default {
 			if(token) {
 				localStorage.token = token
 				localStorage.refreshAt = Date.now()
-				window.close()
+				if(!this.isTouch) {
+					window.close()
+					return
+				}
 			}
-			else if(localStorage.token) {
+			if(localStorage.token1) {
 				this.$router.replace('/dashboard/projects')
 			}
 		},
