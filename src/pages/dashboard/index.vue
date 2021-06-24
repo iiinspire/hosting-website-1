@@ -12,7 +12,9 @@
 	</div>
 	<div class="wrap-1">
 		<div class="con-2" style="min-height: 50vh;">
-			<router-view></router-view>
+			<keep-alive>
+				<router-view></router-view>
+			</keep-alive>
 		</div>
 	</div>
 </div>

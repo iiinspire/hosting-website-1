@@ -10,6 +10,7 @@ const store = new Vuex.Store({
 		nowDate: new Date(),
 		...getWH(),
 		isTouch: 'ontouchstart' in window,
+		isFoucs: true,
 		appInfo: {
 			title: '健身',
 		},
@@ -40,6 +41,16 @@ function getWH() {
 window.onresize = () => {
 	setState({
 		...getWH(),
+	})
+}
+window.onblur = () => {
+	setState({
+		isFoucs: false,
+	})
+}
+window.onfocus = () => {
+	setState({
+		isFoucs: true,
 	})
 }
 
