@@ -17,7 +17,23 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
+
 export default {
+	computed: {
+		...mapState({
+			isFoucs: s => s.isFoucs,
+		}),
+	},
+	watch: {
+		isFoucs(val) {
+			if(val && this.isOpen) {
+				this.isOpen = false
+				console.log('on focus')
+				this.onInit()
+			}
+		},
+	},
 	mounted() {
 		this.onInit()
 	},
@@ -27,8 +43,9 @@ export default {
 			if(token) {
 				localStorage.token = token
 				localStorage.refreshAt = Date.now()
+				window.close()
 			}
-			if(localStorage.token) {
+			else if(localStorage.token) {
 				this.$router.replace('/dashboard/projects')
 			}
 		},
@@ -39,8 +56,9 @@ export default {
 				})
 				const { data } = await this.$http.get('/githubapp/url')
 				this.$loading.close()
-				console.log(data)
-				location.href = data.url
+				// console.log(data)
+				this.isOpen = true
+				this.$openWindow(data.url)
 			} catch (error) {
 				console.log(error)
 			}
