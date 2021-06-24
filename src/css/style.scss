@@ -18,6 +18,14 @@ body {
 	.v-slide-group__next, .v-slide-group__prev {
 		display: none!important;
 	}
+	.v-list-item {
+		border-left: 3px solid transparent;
+	}
+	.v-list-item-group .v-list-item--active {
+		border-left: 3px solid;
+		background: #ECF4FF;
+		pointer-events: none;
+	}
 }
 .color-1 {
 	color: $color1;
@@ -51,11 +59,15 @@ body {
 }
 .fl-r { float: right;}
 
+$bdcolor: #E6E8EB;
 .bd-1 {
-	border: 1px solid #E6E8EB;
+	border: 1px solid $bdcolor;
 }
 .bdb-1 {
-	border-bottom: 1px solid #E6E8EB;
+	border-bottom: 1px solid $bdcolor;
+}
+.bdr-1 {
+	border-right: 1px solid $bdcolor;
 }
 .bg-proj-1 {
 	height: 110px;
