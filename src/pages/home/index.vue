@@ -49,7 +49,7 @@ export default {
 					return
 				}
 			}
-			if(localStorage.token1) {
+			if(localStorage.token) {
 				this.$router.replace('/dashboard/projects')
 			}
 		},
