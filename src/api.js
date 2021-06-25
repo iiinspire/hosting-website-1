@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Axios from 'axios'
+import router from './router'
 
 const http = Axios.create({
 	baseURL: 'https://h.foreverland.xyz',
@@ -26,7 +27,7 @@ http.interceptors.response.use(res => {
 		Vue.prototype.$alert(msg)
 		if(data.code == 401) {
 			localStorage.clear()
-			Vue.prototype.$router.replace('/')
+			router.replace('/')
 		}
 		throw data
 	}
@@ -39,7 +40,7 @@ http.interceptors.response.use(res => {
 	// console.log(status, statusText)
 	let msg = data.msg || statusText || (status ? `${config.url}：${status}` : error.message)
 	if(status == 401) {
-		Vue.prototype.$router.replace('/')
+		router.replace('/')
 	}
 	if(msg) {
 		Vue.prototype.$alert(msg)
