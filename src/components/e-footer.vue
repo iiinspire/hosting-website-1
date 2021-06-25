@@ -18,6 +18,7 @@
 				</v-btn>
 			</div>
 		</div>
+		
 		<div class="flex-grow-1">
 			<v-row>
 				<v-col cols="6" lg="3" md="3"
@@ -30,6 +31,10 @@
 					</div>
 				</v-col>
 			</v-row>
+		</div>
+
+		<div class="fz-12 mt-10">
+			Copyright © 2021 4everlan Inc. All rights reserved
 		</div>
 	</div>
 </div>
