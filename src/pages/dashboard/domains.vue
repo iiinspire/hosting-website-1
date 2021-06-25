@@ -1,9 +1,39 @@
 <template>
 <div>
-	<e-card-head-1 title="Domains">
-		<div>
-			Manage the domains you can use within 4everland
+	<v-card outlined>
+		<e-card-head-1 title="Domains">
+			<div>
+				Manage the domains you can use within 4everland
+			</div>
+		</e-card-head-1>
+		<div class="pd-20">
+			<div class="mb-5 ta-r">
+				<v-btn small>Add</v-btn>
+				<v-btn small class="ml-5">Delete</v-btn>
+			</div>
+			<v-data-table class="elevation-1" :headers="headers" :items="list"></v-data-table>
 		</div>
-	</e-card-head-1>
+	</v-card>
 </div>
 </template>
+
+<script>
+export default {
+	data() {
+		return {
+			headers: [
+				{ text: 'Domain', value: 'domain' },
+				{ text: 'Nameservers', value: 'server' },
+				{ text: 'Age', value: 'age' },
+			],
+			list: [
+				{
+					domain: 'test.4verland.com',
+					server: 'main',
+					age: '1d',
+				}
+			],
+		}
+	}
+}
+</script>
