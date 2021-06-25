@@ -27,18 +27,18 @@
 	</div>
 	<v-row v-else>
 		<v-col cols="12" :md="6"
-			v-for="(item, i) in list" :key="i">
+			v-for="(it, i) in list" :key="i">
 			<v-card outlined class="hover-c1 trans-200" to="/project/overview">
 				<v-img src="img/proj-bg-def.png"></v-img>
 				<v-card-title>
-					<span>demo-app</span>
+					<span>{{ it.name }}</span>
 					<div class="ml-auto">
 						<v-btn small depressed color="primary" @click.prevent="onVisit">Visit</v-btn>
 					</div>
 				</v-card-title>
 				<v-card-subtitle>
 					<div>
-						demo-app.verce
+						{{ it.namespace }}
 						<span class="ml-3 gray">2d ago</span>
 					</div>
 				</v-card-subtitle>
@@ -47,8 +47,11 @@
 
 				<v-card-subtitle>
 					<v-icon :color="$color1">mdi-github</v-icon>
-					<span class="ml-2">demo/demo-app</span>
-					<span class="fl-r gray">Updated 27d ago</span>
+					<span class="ml-2">{{ it.namespace }}/{{ it.name }}</span>
+					<span class="fl-r gray">
+						Updated 20min ago
+						<!-- {{ new Date(it.updateAt).toNiceTime(nowDate) }} -->
+					</span>
 				</v-card-subtitle>
 			</v-card>
 		</v-col>
@@ -68,24 +71,20 @@ export default {
 	},
 	computed: {
 		...mapState({
+			nowDate: s => s.nowDate,
 			isFoucs: s => s.isFoucs,
 		}),
 	},
 	watch: {
-		isFoucs(val) {
-			if(val && this.isClickNew) {
-				this.isClickNew = false
-				this.getList()
-			}
-		},
+		
 	},
 	mounted() {
 		this.getList()
 	},
 	methods: {
 		addNew() {
-			this.isClickNew = true
-			this.$openWindow('https://github.com/apps/foreverlandxyz/installations/new')
+			this.$router.push('/project/new')
+			// this.$openWindow('https://github.com/apps/foreverlandxyz/installations/new')
 		},
 		onVisit() {
 			this.$alert('develop')
@@ -93,7 +92,7 @@ export default {
 		async getList() {
 			try {
 				this.loading = true
-				const { data } = await this.$http.get('/repo/list')
+				const { data } = await this.$http.get('/project')
 				this.list = data
 				console.log(data)
 			} catch (error) {

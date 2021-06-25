@@ -1,6 +1,7 @@
 import Home from './home'
 import Dashboard from './dashboard'
 import DashChildren from './dashboard/routes'
+import ProjectNew from './new'
 import Project from './project'
 import ProjectChildren from './project/routes'
 import Build from './build'
@@ -15,6 +16,10 @@ export default [
 		path: '/dashboard',
 		component: Dashboard,
 		children: DashChildren,
+	},
+	{
+		path: '/project/new',
+		component: ProjectNew,
 	},
 	{
 		path: '/project',

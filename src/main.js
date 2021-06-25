@@ -24,6 +24,11 @@ new Vue({
 	mounted() {
 		// this.onInit()
 	},
+	watch: {
+		'$route.path'() {
+			window.scrollTo(0, 0)
+		},
+	},
 	methods: {
 		async onInit() {
 			const now = Date.now()
