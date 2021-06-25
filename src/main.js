@@ -22,7 +22,7 @@ new Vue({
 	vuetify,
 	render: h => h(App),
 	mounted() {
-		this.onInit()
+		// this.onInit()
 	},
 	methods: {
 		async onInit() {

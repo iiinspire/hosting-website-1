@@ -3,6 +3,8 @@ import Dashboard from './dashboard'
 import DashChildren from './dashboard/routes'
 import Project from './project'
 import ProjectChildren from './project/routes'
+import Build from './build'
+import BuildChildren from './build/routes'
 
 export default [
 	{
@@ -18,5 +20,10 @@ export default [
 		path: '/project',
 		component: Project,
 		children: ProjectChildren,
+	},
+	{
+		path: '/build',
+		component: Build,
+		children: BuildChildren,
 	},
 ]
