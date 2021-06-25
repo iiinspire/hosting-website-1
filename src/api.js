@@ -24,6 +24,9 @@ http.interceptors.response.use(res => {
 		Vue.prototype.$loading.close()
 		console.log(msg)
 		Vue.prototype.$alert(msg)
+		if(data.code == 401) {
+			Vue.prototype.$router.replace('/')
+		}
 		throw data
 	}
 	if('data' in data) {
