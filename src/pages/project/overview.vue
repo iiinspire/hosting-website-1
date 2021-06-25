@@ -4,20 +4,16 @@
 <template>
 <div>
 	<v-card outlined>
-		<div class="pos-r bg-proj-1">
-			<div class="y-center w100p d-flex al-c pd-20">
-				<div class="white-0">
-					<div class="fz-18">demo-app</div>
-					<div class="mt-1 d-flex al-c fz-14">
-						<v-icon color="#fff" size="18">mdi-github</v-icon>
-						<span class="op-5 ml-1">demo/demo-app</span>
-					</div>
-				</div>
-				<div class="ml-auto">
-					<v-btn small depressed color="primary">Visit</v-btn>
-				</div>
+		<e-card-head-1 title="demo-app1">
+			<div class="">
+				<v-icon color="#fff" size="16">mdi-github</v-icon>
+				<span class="ml-1">demo/demo-app1</span>
 			</div>
-		</div>
+			<template #right>
+				<v-btn small depressed color="primary">Visit</v-btn>
+			</template>
+		</e-card-head-1>
+		
 		<div class="pd-20">
 			<div class="d-flex al-c flex-wrap">
 				<div class="mr-auto">

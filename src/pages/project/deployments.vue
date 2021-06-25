@@ -1,17 +1,12 @@
 <template>
 <div>
 	<v-card outlined>
-		<div class="pos-r bg-proj-1">
-			<div class="y-center w100p d-flex al-c pd-20">
-				<div class="white-0">
-					<div class="fz-18">Deployments</div>
-					<div class="mt-1 white-5 fz-14">
-						A list of deployments in <span class="white-0">nuxtjs</span>
-					</div>
-				</div>
-				<!-- <div class="ml-auto"></div> -->
+		<e-card-head-1 title="Deployments">
+			<div>
+				A list of deployments in <span class="white-0">nuxtjs</span>
 			</div>
-		</div>
+		</e-card-head-1>
+		
 		<div class="pd-20">
 			<div class="bd-1 bdrs-5">
 				<div v-ripple class="bdb-1 pd-20" :class="{

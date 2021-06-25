@@ -1,16 +1,12 @@
 <template>
 <div>
 	<v-card outlined>
-		<div class="pos-r bg-proj-1">
-			<div class="y-center w100p d-flex al-c pd-20">
-				<div class="white-0">
-					<div class="fz-18">Project Settings</div>
-					<div class="mt-1 white-5 fz-14">
-						Update the settings of demo
-					</div>
-				</div>
+		<e-card-head-1 title="Project Settings">
+			<div>
+				Update the settings of demo1
 			</div>
-		</div>
+		</e-card-head-1>
+		
 		<div class="" :class="{
 			'd-flex': !asMobile,
 		}">
