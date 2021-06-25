@@ -11,7 +11,7 @@
 				<v-btn small>Add</v-btn>
 				<v-btn small class="ml-5">Delete</v-btn>
 			</div>
-			<v-data-table class="elevation-1" :headers="headers" :items="list"></v-data-table>
+			<v-data-table class="-elevation-1" :headers="headers" :items="list"></v-data-table>
 		</div>
 	</v-card>
 </div>
