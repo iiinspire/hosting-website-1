@@ -23,11 +23,12 @@ export default {
 	computed: {
 		...mapState({
 			isTouch: s => s.isTouch,
-			isFoucs: s => s.isFoucs,
+			isFocus: s => s.isFocus,
+			token: s => s.token,
 		}),
 	},
 	watch: {
-		isFoucs(val) {
+		isFocus(val) {
 			if(val && this.isOpen) {
 				this.isOpen = false
 				console.log('on focus')
@@ -50,6 +51,11 @@ export default {
 				}
 			}
 			if(localStorage.token) {
+				if(this.token != localStorage.token) {
+					this.$setState({
+						token: localStorage.token,
+					})
+				}
 				this.$router.replace('/dashboard/projects')
 			}
 		},

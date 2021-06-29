@@ -1,13 +1,43 @@
 <template>
 <div class="wrap-1">
+	<v-dialog v-model="showSelect" max-width="500">
+		<e-deploy :value="showSelect" :importItem="importItem" @close="showSelect = false"></e-deploy>
+	</v-dialog>
+
 	<div class="con-1">
 		<v-row>
 			<v-col cols="12" md="6">
 				<v-card outlined min-height="400">
 					<div class="pd-20">
+						<div class="fz-20 fw-b mr-10">Import Git Repositor</div>
 						<div class="d-flex al-c">
-							<span class="fz-18 mr-10">Import Git Repositor</span>
+							<v-btn color="primary" class="mr-5" @click="addNew" :loading="loading">Add Github</v-btn>
 							<v-text-field prepend-icon="mdi-magnify" placeholder="Search"></v-text-field>
+						</div>
+
+						<v-skeleton-loader v-if="!list"
+						type="card"
+						></v-skeleton-loader>
+						<div class="bd-1 bg-f5 bdrs-5 pa-10 d-flex flex-center al-c" style="min-height: 250px" 
+							v-else-if="!list.length">
+							<div>
+								<div>No Git Repositories Found</div>
+								<div class="gray fz-14 mt-3">
+									Try selecting a different Git account or creating repositories.
+								</div>
+							</div>
+						</div>
+						<div class="bd-1">
+							<div v-ripple v-for="(it, i) in list" :key="i">
+								<div class="pd-20 d-flex al-c">
+									<v-icon>mdi-wallet</v-icon>
+									<span class="ml-5 fz-17">{{ it.name }}</span>
+									<span class="ml-3 gray fz-13">
+										{{ new Date(it.updateAt).toNiceTime(nowDate) }}
+									</span>
+									<v-btn class="ml-auto" color="primary" small @click="onImport(it)">Import</v-btn>
+								</div>
+							</div>
 						</div>
 					</div>
 				</v-card>
@@ -15,10 +45,70 @@
 			<v-col cols="12" md="6">
 				<v-card outlined min-height="400">
 					<div class="pd-20">
+
 					</div>
 				</v-card>
 			</v-col>
 		</v-row>
 	</div>
+
+	
 </div>
 </template>
+
+<script>
+import { mapState } from 'vuex'
+import eDeploy from './e-deploy.vue'
+
+export default {
+	components: {
+		eDeploy,
+	},
+	data() {
+		return {
+			list: null,
+			loading: false,
+			showSelect: false,
+			importItem: null,
+		}
+	},
+	computed: {
+		...mapState({
+			nowDate: s => s.nowDate,
+			isFocus: s => s.isFocus,
+		})
+	},
+	watch: {
+		isFocus(val) {
+			if(val && this.isAddClick) {
+				this.isAddClick = false
+				this.loading = true
+				this.getList()
+			}
+		},
+	},
+	mounted() {
+		this.getList()
+	},
+	methods: {
+		
+		onImport(it) {
+			this.importItem = it
+			this.showSelect = true
+		},
+		addNew() {
+			this.isAddClick = true
+			this.$openWindow('https://github.com/apps/foreverlandxyz/installations/new')
+		},
+		async getList() {
+			try {
+				const { data } = await this.$http.get('/repo/list')
+				this.list = data
+			} catch (error) {
+				// 
+			}
+			this.loading = false
+		}
+	}
+}
+</script>

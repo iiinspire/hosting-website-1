@@ -22,24 +22,38 @@ new Vue({
 	vuetify,
 	render: h => h(App),
 	mounted() {
-		// this.onInit()
+		this.onInit()
 	},
 	watch: {
 		'$route.path'() {
 			window.scrollTo(0, 0)
 		},
+		token(val) {
+			if(val) {
+				this.getUesrInfo()
+			}
+		},
 	},
 	methods: {
 		async onInit() {
 			const now = Date.now()
-			if(localStorage.token && now - localStorage.refreshAt > 2*3600e3) {
+			if(localStorage.token) {
 				try {
-					await this.$http.get('/githubapp/refresh')
-					localStorage.refreshAt = now
+					if(now - localStorage.refreshAt > 2*3600e3) {
+						await this.$http.get('/githubapp/refresh')
+						localStorage.refreshAt = now
+					}
+					await this.getUesrInfo()
 				} catch (error) {
 					console.log(error.response)
 				}
 			}
+		},
+		async getUesrInfo() {
+			const { data } = await this.$http.get('/user')
+			this.$setState({
+				userInfo: data,
+			})
 		},
 	},
 }).$mount('#app')

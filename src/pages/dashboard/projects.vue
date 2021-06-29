@@ -72,7 +72,7 @@ export default {
 	computed: {
 		...mapState({
 			nowDate: s => s.nowDate,
-			isFoucs: s => s.isFoucs,
+			isFocus: s => s.isFocus,
 		}),
 	},
 	watch: {
@@ -84,7 +84,6 @@ export default {
 	methods: {
 		addNew() {
 			this.$router.push('/project/new')
-			// this.$openWindow('https://github.com/apps/foreverlandxyz/installations/new')
 		},
 		onVisit() {
 			this.$alert('develop')

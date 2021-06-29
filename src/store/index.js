@@ -10,10 +10,11 @@ const store = new Vuex.Store({
 		nowDate: new Date(),
 		...getWH(),
 		isTouch: 'ontouchstart' in window,
-		isFoucs: true,
+		isFocus: true,
 		appInfo: {
 			title: '健身',
 		},
+		token: localStorage.token,
 		loginSta: 0,
 		userInfo: {},
 		noticeMsg: {},
@@ -45,12 +46,12 @@ window.onresize = () => {
 }
 window.onblur = () => {
 	setState({
-		isFoucs: false,
+		isFocus: false,
 	})
 }
 window.onfocus = () => {
 	setState({
-		isFoucs: true,
+		isFocus: true,
 	})
 }
 

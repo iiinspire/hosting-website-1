@@ -18,6 +18,9 @@ body {
 			margin-bottom: 5px;
 		}
 	}
+	.v-dialog {
+		background: #fff;
+	}
 	.v-slide-group__next, .v-slide-group__prev {
 		display: none!important;
 	}
@@ -65,6 +68,9 @@ body {
 $bdcolor: #E6E8EB;
 .bd-1 {
 	border: 1px solid $bdcolor;
+}
+.bdt-1 {
+	border-top: 1px solid $bdcolor;
 }
 .bdb-1 {
 	border-bottom: 1px solid $bdcolor;

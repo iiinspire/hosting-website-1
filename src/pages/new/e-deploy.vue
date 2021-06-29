@@ -1,0 +1,260 @@
+<style>
+.theme--light.v-messages {
+	display: none;
+	/* v-treeview底部 无内容 */
+}
+</style>
+<template>
+<v-card v-if="importItem">
+	<v-card-title>
+		Select 4everland Scope
+	</v-card-title>
+	<v-card-text>
+		<div class="d-flex al-c">
+			<span>importing</span>
+			<v-icon size="16" class="ml-5">mdi-github</v-icon>
+			<span class="ml-2">{{ importItem.name }}</span>
+			<v-icon size="16" class="ml-5">mdi-source-branch</v-icon>
+			<span class="ml-2">{{ importItem.defaultBranch }}</span>
+		</div>
+	</v-card-text>
+	<div class="pd-20" :class="{
+		'bdt-1': isNext,
+	}">
+		<v-window v-model="isNext">
+			<v-window-item :value="0">
+				<div class="mb-8">
+					<div class="bd-1 pd-20 d-flex al-c">
+						<img :src="userInfo.avatar" style="width: 40px; height: 40px;" class="bdrs-100"/>
+						<span class="fz-18 ml-5">{{ importItem.namespace }}</span>
+						<v-btn color="primary" class="ml-auto" small @click="onNext" :loading="selecting">Select</v-btn>
+					</div>
+					<!-- <div class="fz-14 gray mt-5">
+						Now that you've selected a Git repository to import, you can either create a new 4everland Team and deploy theGit repository to it, or deploy it your existing Personal Account.
+					</div> -->
+				</div>
+			</v-window-item>
+
+			<v-window-item :value="1">
+				<div class="fz-14 gray">
+					Please select the directory within Git repository that contains your project's source code
+				</div>
+				<v-radio-group v-model="srcDir">
+					<v-treeview dense :open="['./']"
+						:items="dirList">
+						<template v-slot:prepend="{item}">
+							<v-radio v-if="item.type == 'dir'" :value="item.id"></v-radio>
+						</template>
+					</v-treeview>
+				</v-radio-group>
+			</v-window-item>
+
+			<v-window-item :value="2">
+				<v-form class="mt-5 ml-5 mr-4 mb-4">
+					<v-text-field label="Project Name" :value="importItem.name" disabled/>
+					<div class="d-flex al-c">
+						<v-text-field label="Root Dorectory" :value="srcDir" disabled/>
+						<v-btn color="primary" class="ml-5" small @click="isNext = 1">Edit</v-btn>
+					</div>
+					<v-select v-model="form.framework"
+						label="Framework Preset" :items="presetList"></v-select>
+					<v-expansion-panels>
+						<v-expansion-panel>
+							<v-expansion-panel-header>
+								Build and Output Settings
+							</v-expansion-panel-header>
+							<v-expansion-panel-content>
+								<div class="d-flex al-c">
+									<v-text-field persistent-placeholder v-model="form.buildCommand"
+										label="Build command" :disabled="!isOverBuild"
+										placeholder="`npm run build`"/>
+									<v-switch v-model="isOverBuild" label="Override" class="ml-5"></v-switch>
+								</div>
+								<div class="d-flex al-c">
+									<v-text-field persistent-placeholder v-model="form.outputDirectory"
+										label="Output Directory" :disabled="!isOverOutput"
+										placeholder="`public` if it exists, or `. `"/>
+									<v-switch v-model="isOverOutput" label="Override" class="ml-5"></v-switch>
+								</div>
+							</v-expansion-panel-content>
+						</v-expansion-panel>
+					</v-expansion-panels>
+
+					<v-expansion-panels class="mt-5">
+						<v-expansion-panel>
+							<v-expansion-panel-header>
+								Environment Variables
+							</v-expansion-panel-header>
+							<v-expansion-panel-content>
+								<div class="d-flex al-c">
+									<v-text-field persistent-placeholder v-model="envForm.name"
+										label="Name" placeholder="Variable_Name"/>
+									<v-text-field persistent-placeholder v-model="envForm.value"
+										label="Value( Will Be Encrypted )" 
+										placeholder="i9ju23nf39" class="ml-5"/>
+									<v-btn small color="primary" class="ml-5" @click="addEnv">Add</v-btn>
+								</div>
+								<v-data-table :headers="envHeaders" :items="envList2" 
+									hide-default-footer
+									v-show="envList.length"></v-data-table>
+							</v-expansion-panel-content>
+						</v-expansion-panel>
+					</v-expansion-panels>
+
+				</v-form>
+			</v-window-item>
+		</v-window>
+	</div>
+	
+	
+	<div class="pd-20 bdt-1 d-flex al-c">
+		<v-btn small @click="onBack">Back</v-btn>
+		<v-btn small color="primary" class="ml-auto" v-if="isNext" :loading="creating"
+			@click="onDeploy">
+			Deploy
+		</v-btn>
+	</div>
+</v-card>
+</template>
+
+<script>
+const srcDir = './'
+
+export default {
+	props: {
+		importItem: Object,
+		value: Boolean,
+	},
+	data() {
+		return {
+			selecting: false,
+			isNext: 2,
+			dirList: [],
+			srcDir,
+			presetList: ['Vue.js', 'React'],
+			isOverBuild: true,
+			isOverOutput: true,
+			form: {
+				framework: '',
+				buildCommand: '',
+				outputDirectory: '',
+			},
+			envHeaders: [
+				{ text: 'Name', value: 'name' },
+				{ text: 'Value', value: 'enc' },
+			],
+			envList: [],
+			envForm: {
+				name: '',
+				value: ''
+			},
+			creating: false,
+		}
+	},
+	computed: {
+		userInfo() {
+			return this.$store.state.userInfo
+		},
+		envList2() {
+			return this.envList.map(it => {
+				return {
+					...it,
+					enc: 'Encrypt',
+				}
+			})
+		},
+	},
+	watch: {
+		value() {
+			this.isNext = 0
+		},
+		isOverBuild() {
+			this.form.buildCommand = ''
+		},
+		isOverOutput() {
+			this.form.outputDirectory = ''
+		},
+	},
+	methods: {
+		addEnv() {
+			const { name } = this.envForm
+			if(!name) return this.$alert('invalid name')
+			this.envList.push(this.envForm)
+			this.envForm = {
+				name: '',
+				value: '',
+			}
+		},
+		async onDeploy() {
+			if(this.isNext < 2) {
+				this.isNext += 1
+				return
+			}
+			const { id: repoId, name } = this.importItem
+			const body = {
+				repoId,
+				name,
+				rootDirectory: this.srcDir,
+				...this.form,
+				env: this.envList,
+			}
+			try {
+				this.creating = true
+				const { data } = await this.$http.post('/project', body)
+				this.$alert('Project id:' + data.projectId).then(() => {
+					console.log(data)
+				})
+				// this.$router.replace('/dashboard/projects')
+			} catch (error) {
+				// 
+			}
+			this.creating = false
+		},
+		async onNext() {
+			try {
+				this.selecting = true
+				const data = await this.getRepoDir()
+				this.dirList = [
+					{
+						name: this.importItem.name,
+						id: srcDir,
+						type: 'dir',
+						children: data,
+					},
+				]
+				this.isNext = 1
+			} catch (error) {
+				// 
+			}
+			this.selecting = false
+		},
+		async getRepoDir(rootPath) {
+			try {
+				const { data } = await this.$http.get('/repo/dir/' + this.importItem.name, {
+					params: {
+						rootPath,
+					}
+				})
+				return data.map(it => {
+					it.id = !rootPath ? it.name : `${rootPath}/${it.name}`
+					if(it.type == 'dir') it.children = [
+						{
+							id: 1,
+							name: 'loading...'
+						}
+					]
+					return it
+				}).sort((a) => {
+					return a.type == 'dir' ? -1 : 1
+				})
+			} catch (error) {
+				// 
+			}
+		},
+		onBack() {
+			if(this.isNext > 0) this.isNext -= 1
+			else this.$emit('close')
+		},
+	},
+}
+</script>
