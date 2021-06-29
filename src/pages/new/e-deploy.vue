@@ -19,9 +19,9 @@
 		</div>
 	</v-card-text>
 	<div class="pd-20" :class="{
-		'bdt-1': isNext,
+		'bdt-1': curStep > 0,
 	}">
-		<v-window v-model="isNext">
+		<v-window v-model="curStep">
 			<v-window-item :value="0">
 				<div class="mb-8">
 					<div class="bd-1 pd-20 d-flex al-c">
@@ -54,7 +54,7 @@
 					<v-text-field label="Project Name" :value="importItem.name" disabled/>
 					<div class="d-flex al-c">
 						<v-text-field label="Root Dorectory" :value="srcDir" disabled/>
-						<v-btn color="primary" class="ml-5" small @click="isNext = 1">Edit</v-btn>
+						<v-btn color="primary" class="ml-5" small @click="curStep = 1">Edit</v-btn>
 					</div>
 					<v-select v-model="form.framework"
 						label="Framework Preset" :items="presetList"></v-select>
@@ -109,7 +109,7 @@
 	
 	<div class="pd-20 bdt-1 d-flex al-c">
 		<v-btn small @click="onBack">Back</v-btn>
-		<v-btn small color="primary" class="ml-auto" v-if="isNext" :loading="creating"
+		<v-btn small color="primary" class="ml-auto" v-if="curStep" :loading="creating"
 			@click="onDeploy">
 			Deploy
 		</v-btn>
@@ -128,7 +128,7 @@ export default {
 	data() {
 		return {
 			selecting: false,
-			isNext: 2,
+			curStep: 0,
 			dirList: [],
 			srcDir,
 			presetList: ['Vue.js', 'React'],
@@ -166,7 +166,7 @@ export default {
 	},
 	watch: {
 		value() {
-			this.isNext = 0
+			this.curStep = 0
 		},
 		isOverBuild() {
 			this.form.buildCommand = ''
@@ -186,8 +186,8 @@ export default {
 			}
 		},
 		async onDeploy() {
-			if(this.isNext < 2) {
-				this.isNext += 1
+			if(this.curStep < 2) {
+				this.curStep += 1
 				return
 			}
 			const { id: repoId, name } = this.importItem
@@ -222,7 +222,7 @@ export default {
 						children: data,
 					},
 				]
-				this.isNext = 1
+				this.curStep = 1
 			} catch (error) {
 				// 
 			}
@@ -252,7 +252,7 @@ export default {
 			}
 		},
 		onBack() {
-			if(this.isNext > 0) this.isNext -= 1
+			if(this.curStep > 0) this.curStep -= 1
 			else this.$emit('close')
 		},
 	},
