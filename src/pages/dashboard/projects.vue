@@ -13,7 +13,6 @@
 	</div>
 	<div v-if="!list">
 		<v-skeleton-loader
-			class="mx-auto"
 			max-width="450"
 			type="card"
 			></v-skeleton-loader>
@@ -28,8 +27,8 @@
 	<v-row v-else>
 		<v-col cols="12" :md="6"
 			v-for="(it, i) in list" :key="i">
-			<v-card outlined class="hover-c1 trans-200" to="/project/overview">
-				<v-img src="img/proj-bg-def.png"></v-img>
+			<v-card outlined class="hover-c1 trans-200" :to="`/project/${it.id}/overview`">
+				<v-img src="img/proj-bg-def.png" height="120"></v-img>
 				<v-card-title>
 					<span>{{ it.name }}</span>
 					<div class="ml-auto">
@@ -83,7 +82,7 @@ export default {
 	},
 	methods: {
 		addNew() {
-			this.$router.push('/project/new')
+			this.$router.push('/new')
 		},
 		onVisit() {
 			this.$alert('develop')

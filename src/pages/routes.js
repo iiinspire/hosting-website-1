@@ -18,16 +18,16 @@ export default [
 		children: DashChildren,
 	},
 	{
-		path: '/project/new',
+		path: '/new',
 		component: ProjectNew,
 	},
 	{
-		path: '/project',
+		path: '/project/:id',
 		component: Project,
 		children: ProjectChildren,
 	},
 	{
-		path: '/build',
+		path: '/build/:id',
 		component: Build,
 		children: BuildChildren,
 	},

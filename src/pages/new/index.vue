@@ -7,7 +7,7 @@
 	<div class="con-1">
 		<v-row>
 			<v-col cols="12" md="6">
-				<v-card outlined min-height="400">
+				<v-card outlined min-height="442">
 					<div class="pd-20">
 						<div class="fz-20 fw-b mr-10">Import Git Repositor</div>
 						<div class="d-flex al-c">
@@ -45,7 +45,19 @@
 			<v-col cols="12" md="6">
 				<v-card outlined min-height="400">
 					<div class="pd-20">
-
+						<div class="fz-20 fw-b mr-10">Clone Template</div>
+						<div class="mt-3 gray fz-14">Alternatively, get started with a template</div>
+						<v-row class="mt-2">
+							<v-col cols="6" v-for="(it, i) in tplList" :key="i">
+								<div class="bd-1">
+									<v-img :src="it.img" height="100"></v-img>
+									<div class="pd-10 d-flex al-c">
+										<img :src="it.logo" style="width: 20px;"/>
+										<div class="ml-2">{{ it.title }}</div>
+									</div>
+								</div>
+							</v-col>
+						</v-row>
 					</div>
 				</v-card>
 			</v-col>
@@ -70,6 +82,23 @@ export default {
 			loading: false,
 			showSelect: false,
 			importItem: null,
+			tplList: [
+				{
+					img: 'img/new/nextjs.png',
+					logo: 'img/new/next.svg',
+					title: 'Next.js',
+				},
+				{
+					img: 'img/new/nuxtjs.png',
+					logo: 'img/new/nuxt.svg',
+					title: 'Next.js',
+				},
+				{
+					img: 'img/new/gatsbyjs.png',
+					logo: 'img/new/gatsby.svg',
+					title: 'Gatsby.js',
+				},
+			]
 		}
 	},
 	computed: {

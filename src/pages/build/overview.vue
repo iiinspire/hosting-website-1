@@ -23,7 +23,10 @@
 
 					<div class="mt-5">
 						<div class="d-flex">
-							<v-btn color="error" class="flex-1">Redeploy</v-btn>
+							<v-btn color="error" class="flex-1" 
+								@click="getBuild('60dc452d39d33700072a1526')">
+								Redeploy
+							</v-btn>
 							<v-btn color="primary" class="ml-5 flex-1">Visit</v-btn>
 						</div>
 					</div>
@@ -59,5 +62,34 @@ export default {
 			return this.$vuetify.breakpoint.smAndDown
 		},
 	},
+	data() {
+		const { id } = this.$route.params
+		return {
+			id,
+		}
+	},
+
+	methods: {
+		async getBuild(id) {
+			try {
+				const { data } = await this.$http.post(`/project/${id}/build`)
+				console.log(data)
+			} catch (error) {
+				console.log(error, 'build err')
+			}
+		},
+		async getLog(stepName = 'build') {
+			try {
+				const { data } = await this.$http.request({
+					url: `/project/${this.id}/deployment/${stepName}/logs`,
+					method: 'get',
+					responseType: 'stream',
+				})
+				console.log(data)
+			} catch (error) {
+				console.log(error, 'step log')
+			}
+		}
+	}
 }
 </script>

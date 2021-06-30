@@ -38,12 +38,12 @@ new Vue({
 		async onInit() {
 			const now = Date.now()
 			if(localStorage.token) {
+				this.getUesrInfo()
 				try {
 					if(now - localStorage.refreshAt > 2*3600e3) {
 						await this.$http.get('/githubapp/refresh')
 						localStorage.refreshAt = now
 					}
-					await this.getUesrInfo()
 				} catch (error) {
 					console.log(error.response)
 				}

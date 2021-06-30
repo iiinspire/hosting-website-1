@@ -50,8 +50,8 @@
 			</v-window-item>
 
 			<v-window-item :value="2">
-				<v-form class="mt-5 ml-5 mr-4 mb-4">
-					<v-text-field label="Project Name" :value="importItem.name" disabled/>
+				<v-form class="mt-5 ml-3 mr-3 mb-4">
+					<v-text-field label="Project Name" v-model="form.name"/>
 					<div class="d-flex al-c">
 						<v-text-field label="Root Dorectory" :value="srcDir" disabled/>
 						<v-btn color="primary" class="ml-5" small @click="curStep = 1">Edit</v-btn>
@@ -131,11 +131,12 @@ export default {
 			curStep: 0,
 			dirList: [],
 			srcDir,
-			presetList: ['Vue.js', 'React'],
+			presetList: ['vue', 'React'],
 			isOverBuild: true,
 			isOverOutput: true,
 			form: {
-				framework: '',
+				name: '',
+				framework: 'vue',
 				buildCommand: '',
 				outputDirectory: '',
 			},
@@ -188,15 +189,18 @@ export default {
 		async onDeploy() {
 			if(this.curStep < 2) {
 				this.curStep += 1
+				this.form.name = this.importItem.name
 				return
 			}
-			const { id: repoId, name } = this.importItem
+			const { id: repoId } = this.importItem
 			const body = {
 				repoId,
-				name,
 				rootDirectory: this.srcDir,
 				...this.form,
 				env: this.envList,
+			}
+			if(!body.buildCommand) {
+				body.buildCommand = 'npm run build'
 			}
 			try {
 				this.creating = true
