@@ -1,6 +1,6 @@
 <template>
 <div class="wrap-1">
-	<v-dialog v-model="showSelect" max-width="500">
+	<v-dialog v-model="showSelect" max-width="600">
 		<e-deploy :value="showSelect" :importItem="importItem" @close="showSelect = false"></e-deploy>
 	</v-dialog>
 

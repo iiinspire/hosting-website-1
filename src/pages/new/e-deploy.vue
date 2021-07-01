@@ -56,8 +56,15 @@
 						<v-text-field label="Root Dorectory" :value="srcDir" disabled/>
 						<v-btn color="primary" class="ml-5" small @click="curStep = 1">Edit</v-btn>
 					</div>
-					<v-select v-model="form.framework"
-						label="Framework Preset" :items="presetList"></v-select>
+					<v-select v-model="form.framework" @input="onFramework"
+						:items="frameworks"
+						item-text="name"
+						item-value="slug"
+						label="Framework Preset">
+						<template #prepend>
+							<v-icon>mdi-github</v-icon>
+						</template>
+					</v-select>
 					<v-expansion-panels>
 						<v-expansion-panel>
 							<v-expansion-panel-header>
@@ -67,7 +74,7 @@
 								<div class="d-flex al-c">
 									<v-text-field persistent-placeholder v-model="form.buildCommand"
 										label="Build command" :disabled="!isOverBuild"
-										placeholder="`npm run build`"/>
+										:placeholder="buildCommandHint"/>
 									<v-switch v-model="isOverBuild" label="Override" class="ml-5"></v-switch>
 								</div>
 								<div class="d-flex al-c">
@@ -118,7 +125,9 @@
 </template>
 
 <script>
+import frameworks from '../../assets/frameworks.json'
 const srcDir = './'
+console.log(frameworks)
 
 export default {
 	props: {
@@ -131,12 +140,14 @@ export default {
 			curStep: 0,
 			dirList: [],
 			srcDir,
+			frameworks,
 			presetList: ['vue', 'React'],
 			isOverBuild: true,
 			isOverOutput: true,
+			buildCommandHint: '`npm run build`',
 			form: {
 				name: '',
-				framework: 'vue',
+				framework: '',
 				buildCommand: '',
 				outputDirectory: '',
 			},
@@ -164,6 +175,9 @@ export default {
 				}
 			})
 		},
+		chooseFramework() {
+			return this.frameworks.filter(it => it.slug == this.form.framework)[0]
+		},
 	},
 	watch: {
 		value() {
@@ -177,6 +191,12 @@ export default {
 		},
 	},
 	methods: {
+		onFramework(val) {
+			const item = this.frameworks.filter(it => it.slug == val)[0]
+			const { buildCommand } = item.settings
+			this.form.buildCommand = buildCommand.value || ''
+			this.buildCommandHint = buildCommand.placeholder || ''
+		},
 		addEnv() {
 			const { name } = this.envForm
 			if(!name) return this.$alert('invalid name')
@@ -190,6 +210,7 @@ export default {
 			if(this.curStep < 2) {
 				this.curStep += 1
 				this.form.name = this.importItem.name
+				this.form.framework = 'vue'
 				return
 			}
 			const { id: repoId } = this.importItem

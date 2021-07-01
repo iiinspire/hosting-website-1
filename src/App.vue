@@ -6,7 +6,7 @@
 			</a>
 			<v-spacer></v-spacer>
 		</v-app-bar>
-		<v-main style="min-height: 50vh;">
+		<v-main style="min-height: 70vh;">
 			<router-view></router-view>
 		</v-main>
 
