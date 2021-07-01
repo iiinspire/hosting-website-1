@@ -679,7 +679,7 @@
 			"value": "bundle install"
 		},
 		"buildCommand": {
-			"value": "`npm run build` or `bundle exec middleman build`"
+			"placeholder": "`npm run build` or `bundle exec middleman build`"
 		},
 		"devCommand": {
 			"value": "bundle exec middleman server -p $PORT",

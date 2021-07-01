@@ -25,9 +25,9 @@
 			<v-window-item :value="0">
 				<div class="mb-8">
 					<div class="bd-1 pd-20 d-flex al-c">
-						<img :src="userInfo.avatar" style="width: 40px; height: 40px;" class="bdrs-100"/>
+						<img :src="userInfo.avatar" style="width: 40px; height: 40px;" class="bdrs-100 bg-f8"/>
 						<span class="fz-18 ml-5">{{ importItem.namespace }}</span>
-						<v-btn color="primary" class="ml-auto" small @click="onNext" :loading="selecting">Select</v-btn>
+						<v-btn color="primary" class="ml-auto" small @click="onSelect" :loading="selecting">Select</v-btn>
 					</div>
 					<!-- <div class="fz-14 gray mt-5">
 						Now that you've selected a Git repository to import, you can either create a new 4everland Team and deploy theGit repository to it, or deploy it your existing Personal Account.
@@ -61,8 +61,8 @@
 						item-text="name"
 						item-value="slug"
 						label="Framework Preset">
-						<template #prepend>
-							<v-icon>mdi-github</v-icon>
+						<template #prepend v-if="chooseFramework">
+							<img :src="chooseFramework.logo" style="width: 20px">
 						</template>
 					</v-select>
 					<v-expansion-panels>
@@ -126,8 +126,8 @@
 
 <script>
 import frameworks from '../../assets/frameworks.json'
-const srcDir = './'
-console.log(frameworks)
+const srcDir = '.'
+// console.log(frameworks)
 
 export default {
 	props: {
@@ -209,33 +209,38 @@ export default {
 		async onDeploy() {
 			if(this.curStep < 2) {
 				this.curStep += 1
-				this.form.name = this.importItem.name
-				this.form.framework = 'vue'
 				return
 			}
 			const { id: repoId } = this.importItem
 			const body = {
 				repoId,
-				rootDirectory: this.srcDir,
+				rootDirectory: ` ${this.srcDir} `,
 				...this.form,
 				env: this.envList,
 			}
 			if(!body.buildCommand) {
-				body.buildCommand = 'npm run build'
+				if(this.buildCommandHint) {
+					const arr = this.buildCommandHint.split('or')
+					body.buildCommand = arr.length > 1 ? arr[0].trim() : this.buildCommandHint
+				}
+				else body.buildCommand = 'npm run build'
 			}
+			body.buildCommand = ` ${body.buildCommand.replace(/`/g, '')} `
+			console.log(body)
 			try {
 				this.creating = true
 				const { data } = await this.$http.post('/project', body)
 				this.$alert('Project id:' + data.projectId).then(() => {
 					console.log(data)
 				})
-				// this.$router.replace('/dashboard/projects')
 			} catch (error) {
 				// 
 			}
 			this.creating = false
 		},
-		async onNext() {
+		async onSelect() {
+			this.form.name = this.importItem.name
+			this.form.framework = 'vue'
 			try {
 				this.selecting = true
 				const data = await this.getRepoDir()
@@ -249,32 +254,29 @@ export default {
 				]
 				this.curStep = 1
 			} catch (error) {
-				// 
+				console.log(error)
+				this.curStep = 2
 			}
 			this.selecting = false
 		},
 		async getRepoDir(rootPath) {
-			try {
-				const { data } = await this.$http.get('/repo/dir/' + this.importItem.name, {
-					params: {
-						rootPath,
+			const { data } = await this.$http.get('/repo/dir/' + this.importItem.name, {
+				params: {
+					rootPath,
+				}
+			})
+			return data.map(it => {
+				it.id = !rootPath ? it.name : `${rootPath}/${it.name}`
+				if(it.type == 'dir') it.children = [
+					{
+						id: 1,
+						name: 'loading...'
 					}
-				})
-				return data.map(it => {
-					it.id = !rootPath ? it.name : `${rootPath}/${it.name}`
-					if(it.type == 'dir') it.children = [
-						{
-							id: 1,
-							name: 'loading...'
-						}
-					]
-					return it
-				}).sort((a) => {
-					return a.type == 'dir' ? -1 : 1
-				})
-			} catch (error) {
-				// 
-			}
+				]
+				return it
+			}).sort((a) => {
+				return a.type == 'dir' ? -1 : 1
+			})
 		},
 		onBack() {
 			if(this.curStep > 0) this.curStep -= 1

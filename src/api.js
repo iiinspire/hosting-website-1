@@ -24,12 +24,15 @@ http.interceptors.response.use(res => {
 		let msg = data.message || `${data.code} error`
 		Vue.prototype.$loading.close()
 		console.log(msg)
-		Vue.prototype.$alert(msg)
+		
 		if(data.code == 401) {
 			localStorage.clear()
 			router.replace('/')
 		}
-		throw data
+		else {
+			Vue.prototype.$alert(msg)
+		}
+		throw new Error(msg)
 	}
 	if('data' in data) {
 		return data
