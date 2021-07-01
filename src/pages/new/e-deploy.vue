@@ -40,7 +40,7 @@
 					Please select the directory within Git repository that contains your project's source code
 				</div>
 				<v-radio-group v-model="srcDir">
-					<v-treeview dense :open="['./']"
+					<v-treeview dense :open="[initSrcDir]"
 						:items="dirList">
 						<template v-slot:prepend="{item}">
 							<v-radio v-if="item.type == 'dir'" :value="item.id"></v-radio>
@@ -140,6 +140,7 @@ export default {
 			curStep: 0,
 			dirList: [],
 			srcDir,
+			initSrcDir: srcDir,
 			frameworks,
 			presetList: ['vue', 'React'],
 			isOverBuild: true,
@@ -220,7 +221,7 @@ export default {
 			}
 			if(!body.buildCommand) {
 				if(this.buildCommandHint) {
-					const arr = this.buildCommandHint.split('or')
+					const arr = this.buildCommandHint.split(' or ')
 					body.buildCommand = arr.length > 1 ? arr[0].trim() : this.buildCommandHint
 				}
 				else body.buildCommand = 'npm run build'

@@ -34,7 +34,7 @@
 		</div>
 
 		<div class="fz-12 mt-10">
-			Copyright © 2021 4everlan Inc. All rights reserved
+			Copyright © 2021 4everland Inc. All rights reserved
 		</div>
 	</div>
 </div>

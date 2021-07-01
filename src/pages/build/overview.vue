@@ -68,7 +68,9 @@ export default {
 			id,
 		}
 	},
-
+	mounted() {
+		
+	},
 	methods: {
 		async getBuild(id) {
 			try {
@@ -80,11 +82,7 @@ export default {
 		},
 		async getLog(stepName = 'build') {
 			try {
-				const { data } = await this.$http.request({
-					url: `/project/${this.id}/deployment/${stepName}/logs`,
-					method: 'get',
-					responseType: 'stream',
-				})
+				const { data } = await this.$http.get(`/project/${this.id}/deployment/${stepName}/logs`)
 				console.log(data)
 			} catch (error) {
 				console.log(error, 'step log')

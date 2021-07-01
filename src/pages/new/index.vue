@@ -28,7 +28,7 @@
 							</div>
 						</div>
 						<div class="bd-1">
-							<div v-ripple v-for="(it, i) in list" :key="i">
+							<div v-for="(it, i) in list" :key="i">
 								<div class="pd-20 d-flex al-c">
 									<v-icon>mdi-wallet</v-icon>
 									<span class="ml-5 fz-17">{{ it.name }}</span>

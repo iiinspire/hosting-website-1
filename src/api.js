@@ -20,22 +20,24 @@ http.interceptors.request.use(config => {
 
 http.interceptors.response.use(res => {
 	const data = res.data
-	if(data.code != 200) {
-		let msg = data.message || `${data.code} error`
-		Vue.prototype.$loading.close()
-		console.log(msg)
-		
-		if(data.code == 401) {
-			localStorage.clear()
-			router.replace('/')
+	if(typeof data == 'object' && data) {
+		if(data.code != 200) {
+			let msg = data.message || `${data.code} error`
+			Vue.prototype.$loading.close()
+			console.log(msg)
+			
+			if(data.code == 401) {
+				localStorage.clear()
+				router.replace('/')
+			}
+			else {
+				Vue.prototype.$alert(msg)
+			}
+			throw new Error(msg)
 		}
-		else {
-			Vue.prototype.$alert(msg)
+		if('data' in data) {
+			return data
 		}
-		throw new Error(msg)
-	}
-	if('data' in data) {
-		return data
 	}
 	return res
 }, error => {

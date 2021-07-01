@@ -83,7 +83,7 @@ Date.prototype.toNiceTime = function(now, mode = 1) {
 	}
 	else if (date >= today) datePart = 'today'
 	else if (date >= today.getNextDay(-1)) datePart = 'yesterday'
-	return datePart + ' ' + timePart
+	return timePart + ' ' + datePart
 }
 
 String.prototype.cutStr = function (pre = 100, trail = 0) {

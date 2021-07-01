@@ -46,10 +46,10 @@
 
 				<v-card-subtitle>
 					<v-icon :color="$color1">mdi-github</v-icon>
-					<span class="ml-2">{{ it.namespace }}/{{ it.name }}</span>
+					<span class="ml-2">{{ it.repo.namespace }}/{{ it.name }}</span>
 					<span class="fl-r gray">
-						Updated 20min ago
-						<!-- {{ new Date(it.updateAt).toNiceTime(nowDate) }} -->
+						<!-- Updated 20min ago -->
+						{{ new Date(it.repo.updateAt).toNiceTime(nowDate) }}
 					</span>
 				</v-card-subtitle>
 			</v-card>
