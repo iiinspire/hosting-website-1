@@ -2,7 +2,7 @@
 	<v-app>
 		<v-app-bar :app="false" :color="bg1" dark>
 			<a href="/">
-				<img src="https://www.4everland.org/imgs/logo.svg" style="height: 30px" class="d-b" />
+				<img src="img/icon.svg" style="height: 30px" class="d-b" />
 			</a>
 			<v-spacer></v-spacer>
 		</v-app-bar>
