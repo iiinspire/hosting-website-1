@@ -10,15 +10,16 @@
 				<v-card outlined min-height="442">
 					<div class="pd-20">
 						<div class="fz-20 fw-b mr-10">Import Git Repositor</div>
-						<div class="d-flex al-c">
-							<v-btn color="primary" class="mr-5" @click="addNew" :loading="loading">Add Github</v-btn>
-							<v-text-field prepend-icon="mdi-magnify" placeholder="Search"></v-text-field>
+						<div class="d-flex al-c mb-5 mt-1">
+							<v-btn color="primary" class="mr-4" @click="addNew" :loading="loading" small>Add Github</v-btn>
+							<v-text-field prepend-icon="mdi-magnify" style="margin-top: 14px;"
+								placeholder="Search" dense></v-text-field>
 						</div>
 
-						<v-skeleton-loader v-if="!list"
-						type="article"
-						></v-skeleton-loader>
-						<div class="bd-1 bg-f5 bdrs-5 pa-10 d-flex flex-center al-c" style="min-height: 250px" 
+						<v-skeleton-loader v-if="!list" type="article" />
+
+						<div class="bd-1 bg-f5 bdrs-5 pa-10 d-flex flex-center al-c" 
+							style="min-height: 250px" 
 							v-else-if="!list.length">
 							<div>
 								<div>No Git Repositories Found</div>
@@ -27,12 +28,12 @@
 								</div>
 							</div>
 						</div>
-						<div class="bd-1">
+						<div class="bd-1" v-else>
 							<div v-for="(it, i) in list" :key="i">
 								<div class="pd-20 d-flex al-c">
-									<v-icon>mdi-wallet</v-icon>
-									<span class="ml-5 fz-17">{{ it.name }}</span>
-									<span class="ml-3 gray fz-13">
+									<!-- <v-icon class="mr-5">mdi-wallet</v-icon> -->
+									<span class="fz-17 line-1">{{ it.name }}</span>
+									<span class="ml-3 mr-3 gray fz-13 shrink-0">
 										{{ new Date(it.updateAt).toNiceTime(nowDate) }}
 									</span>
 									<v-btn class="ml-auto" color="primary" small @click="onImport(it)">Import</v-btn>
