@@ -34,7 +34,7 @@
 				The project will be permanently deleted,including its deployments and domains. This action is irreversible can not be undone.
 			</div>
 		</div>
-		<div class="pd-15-20 bdt-1 bg-f8 d-flex">
+		<div class="pd-10-20 bdt-1 bg-f8 d-flex">
 			<v-btn color="error" small class="ml-auto">Delete</v-btn>
 		</div>
 	</div>
