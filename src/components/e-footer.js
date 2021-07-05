@@ -7,24 +7,31 @@ export default {
 					subs: [
 						{
 							label: 'Next.js',
+							link: '/solution/nextjs',
 						},
 						{
 							label: 'Create React App',
+							link: '/solution/react',
 						},
 						{
 							label: 'Gatsby',
+							link: '/solution/gatsby',
 						},
 						{
 							label: 'Nuxt.js',
+							link: '/solution/nuxtjs',
 						},
 						{
 							label: 'Vue',
+							link: '/solution/vue',
 						},
 						{
 							label: 'Angular',
+							link: '/solution/angular',
 						},
 						{
 							label: 'More Frameworks',
+							link: '/solution/more',
 						},
 					],
 				},

@@ -6,11 +6,16 @@ import Project from './project'
 import ProjectChildren from './project/routes'
 import Build from './build'
 import BuildChildren from './build/routes'
+import Solution from './solution'
 
 export default [
 	{
 		path: '/',
 		component: Home,
+	},
+	{
+		path: '/solution/:name',
+		component: Solution,
 	},
 	{
 		path: '/dashboard',
