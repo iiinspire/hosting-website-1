@@ -45,12 +45,14 @@
 				<v-divider></v-divider>
 
 				<v-card-subtitle>
-					<v-icon :color="$color1">mdi-github</v-icon>
-					<span class="ml-2">{{ it.repo.namespace }}/{{ it.name }}</span>
-					<span class="fl-r gray">
-						<!-- Updated 20min ago -->
-						{{ new Date(it.repo.updateAt).toNiceTime(nowDate) }}
-					</span>
+					<div class="d-flex al-c">
+						<v-icon :color="$color1">mdi-github</v-icon>
+						<span class="ml-2 line-1">{{ it.repo.namespace }}/{{ it.name }}</span>
+						<span class="ml-auto gray shrink-0">
+							<!-- Updated 20min ago -->
+							{{ new Date(it.repo.updateAt).toNiceTime(nowDate) }}
+						</span>
+					</div>
 				</v-card-subtitle>
 			</v-card>
 		</v-col>

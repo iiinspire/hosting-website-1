@@ -33,8 +33,11 @@ body {
 		pointer-events: none;
 	}
 }
-.color-1 {
+.color-1, a {
 	color: $color1;
+}
+a {
+	text-decoration: none;
 }
 .v-main {
 	background: linear-gradient(90deg, #fff, #e0e7f2 10%,#fff 70%, #f7ecec);

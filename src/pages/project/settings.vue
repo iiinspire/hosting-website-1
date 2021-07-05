@@ -30,6 +30,7 @@ export default {
 				},
 				{
 					text: 'Environment Variables',
+					comp: 'st-env-var',
 				},
 				{
 					text: 'Advanced',
