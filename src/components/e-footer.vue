@@ -10,7 +10,7 @@
 		<div class="mb-10 ml-2" :class="{
 			'mr-10': !$vuetify.breakpoint.mobile,
 		}">
-			<img src="https://www.4everland.org/imgs/logo.svg" style="height: 30px" />
+			<img src="img/icon.svg" style="height: 30px" />
 			<div class="mt-10">
 				<v-btn icon :href="item.link" target="_blank" class="mr-2"
 					v-for="(item, i) in links" :key="i">

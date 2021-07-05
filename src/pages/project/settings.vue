@@ -6,31 +6,7 @@
 				Update the settings of demo1
 			</div>
 		</e-card-head-1>
-		
-		<div class="" :class="{
-			'd-flex': !asMobile,
-		}">
-			<div :class="{
-				'bdr-1': !asMobile,
-			}">
-				<v-list flat class="mt-3">
-					<!-- <v-subheader></v-subheader> -->
-					<v-list-item-group
-						v-model="curIdx"
-						color="primary">
-						<v-list-item
-							v-for="(item, i) in menus" :key="i">
-							<!-- <v-list-item-icon>
-								<v-icon v-text="item.icon"></v-icon>
-							</v-list-item-icon> -->
-							<v-list-item-content>
-								<v-list-item-title v-text="item.text"></v-list-item-title>
-							</v-list-item-content>
-						</v-list-item>
-					</v-list-item-group>
-				</v-list>
-			</div>
-		</div>
+		<e-side-menus :list="menus"></e-side-menus>
 	</v-card>
 </div>
 </template>
@@ -39,16 +15,18 @@
 export default {
 	data() {
 		return {
-			curIdx: 0,
 			menus: [
 				{
 					text: 'General',
+					comp: 'st-general',
 				},
 				{
 					text: 'Domains',
+					comp: 'st-domains',
 				},
 				{
 					text: 'Git',
+					comp: 'st-git',
 				},
 				{
 					text: 'Environment Variables',
@@ -59,10 +37,6 @@ export default {
 			]
 		}
 	},
-	computed: {
-		asMobile() {
-			return this.$vuetify.breakpoint.smAndDown
-		},
-	}
+	
 }
 </script>
