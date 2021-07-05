@@ -34,6 +34,7 @@ export default {
 				},
 				{
 					text: 'Advanced',
+					comp: 'st-advanced',
 				},
 			]
 		}

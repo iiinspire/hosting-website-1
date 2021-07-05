@@ -13,8 +13,9 @@
 					<div class="gray fz-13">
 						Connected 2d ago
 					</div>
+					<v-btn class="mt-2" outlined color="#888" small v-if="asMobile">Disconnect</v-btn>
 				</div>
-				<v-btn class="ml-auto" outlined color="#888">Disconnect</v-btn>
+				<v-btn class="ml-auto" outlined color="#888" small v-if="!asMobile">Disconnect</v-btn>
 			</div>
 		</div>
 		<div class="pd-15-20 bdt-1 bg-f8">
@@ -73,6 +74,11 @@ export default {
 			},
 			branches: ['main', 'test']
 		}
-	}
+	},
+	computed: {
+		asMobile() {
+			return this.$vuetify.breakpoint.smAndDown
+		},
+	},
 }
 </script>
