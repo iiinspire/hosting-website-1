@@ -1,7 +1,9 @@
 <template>
 <div v-if="asMobile">
+	<!-- :value="0" -->
 	<v-expansion-panels accordion>
-		<v-expansion-panel v-for="(it, i) in list" :key="i">
+		<v-expansion-panel
+			v-for="(it, i) in list" :key="i">
 			<v-expansion-panel-header>
 				{{ it.text }}
 			</v-expansion-panel-header>
@@ -13,7 +15,7 @@
 </div>
 <div class="d-flex" v-else>
 	<div class="bdr-1">
-		<v-list flat class="mt-3">
+		<v-list flat class="mt-3" min-width="240">
 			<v-list-item-group
 				v-model="curIdx"
 				color="primary">
@@ -29,7 +31,7 @@
 			</v-list-item-group>
 		</v-list>
 	</div>
-	<div class="flex-1 pd-15">
+	<div class="flex-1 pd-20">
 		<component :is="curItem.comp" v-if="curItem.comp"></component>
 	</div>
 </div>

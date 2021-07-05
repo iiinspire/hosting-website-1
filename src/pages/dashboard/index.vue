@@ -1,6 +1,6 @@
 <template>
 <div>
-	<div class="bg-white shadow-1 pos-s z-1" style="top: 0;">
+	<div class="bg-white shadow-1 pos-s z-100" style="top: 0;">
 		<div class="con-1">
 			<v-tabs :color="$color1" v-model="tabIdx">
 				<v-tab replace :to="'/dashboard/'+item.path"
