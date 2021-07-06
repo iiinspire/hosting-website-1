@@ -1,5 +1,15 @@
 <template>
 <div>
+	<v-snackbar color="primary" timeout="2000" v-bind="alertInfo.attrs" 
+		v-model="showSnackbar">
+		{{ alertInfo.content }}
+		<template #action>
+			<v-btn  text @click="showSnackbar = false">
+				close
+			</v-btn>
+		</template>
+	</v-snackbar>
+
 	<v-dialog v-model="showLoading" max-width="260px" :persistent="!alertInfo.maskClick">
 		<v-card>
 			<div class="ta-c pd-30">
@@ -18,7 +28,8 @@
 	<v-dialog v-model="showAlert" max-width="460" :persistent="alertInfo.showCancel">
 		<v-card>
 			<v-card-title>
-				{{ alertInfo.title || 'Tip' }}
+				<v-icon color="warning" class="mr-2">mdi-alert-circle</v-icon>
+				{{ alertInfo.title ? alertInfo.title : (alertInfo.showCancel ? 'Confirm' : 'Alert') }}
 			</v-card-title>
 			<v-card-text>
 				<div class="fz-16">{{ alertInfo.content }}</div>
@@ -54,12 +65,16 @@ export default {
 		return {
 			showAlert: false,
 			showLoading: false,
+			showSnackbar: false,
 		}
 	},
 	watch: {
 		alertInfo(info) {
 			if(info.type == 'loading') {
 				this.showLoading = info.isLoading
+			}
+			else if(info.type == 'snackbar') {
+				this.showSnackbar = true
 			}
 			else this.showAlert = true
 		},
@@ -107,6 +122,14 @@ export default {
 				title,
 				content,
 				showCancel: true,
+				...opts,
+			})
+		}
+		Vue.prototype.$notice = (content, attrs={}, opts={}) => {
+			return showModal({
+				type: 'snackbar',
+				content,
+				attrs,
 				...opts,
 			})
 		}
