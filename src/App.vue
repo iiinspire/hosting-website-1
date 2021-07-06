@@ -2,7 +2,8 @@
 	<v-app>
 		<v-app-bar :app="false" :color="bg1" dark>
 			<a href="/">
-				<img src="img/icon.svg" style="height: 30px" class="d-b" />
+				<e-logo class="d-b"></e-logo>
+				<!-- <img src="img/icon.svg" style="height: 30px" class="d-b" /> -->
 			</a>
 			<v-spacer></v-spacer>
 		</v-app-bar>

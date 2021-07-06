@@ -126,7 +126,7 @@
 
 <script>
 import frameworks from '../../assets/frameworks.json'
-const srcDir = '.'
+const srcDir = './'
 // console.log(frameworks)
 
 export default {
@@ -215,7 +215,7 @@ export default {
 			const { id: repoId } = this.importItem
 			const body = {
 				repoId,
-				rootDirectory: ` ${this.srcDir} `,
+				rootDirectory: this.srcDir,
 				...this.form,
 				env: this.envList,
 			}

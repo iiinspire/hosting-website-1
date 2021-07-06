@@ -87,7 +87,7 @@ export default {
 			this.$router.push('/new')
 		},
 		onVisit() {
-			this.$alert('develop')
+			this.$notice('develop')
 		},
 		async getList() {
 			try {

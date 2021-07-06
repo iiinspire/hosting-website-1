@@ -8,7 +8,7 @@
 				{{ it.text }}
 			</v-expansion-panel-header>
 			<v-expansion-panel-content>
-				<component :is="it.comp" v-if="it.comp"></component>
+				<component :is="it.comp" :info="info" v-if="it.comp && info.id"></component>
 			</v-expansion-panel-content>
 		</v-expansion-panel>
 	</v-expansion-panels>
@@ -31,8 +31,10 @@
 			</v-list-item-group>
 		</v-list>
 	</div>
-	<div class="flex-1 pd-20">
-		<component :is="curItem.comp" v-if="curItem.comp"></component>
+	<div class="flex-1 pd-20" v-if="info.id">
+		<component :is="it.comp" :info="info" 
+			v-show="curItem.comp == it.comp"
+			v-for="(it, i) in list" :key="i"></component>
 	</div>
 </div>
 </template>
@@ -41,6 +43,7 @@
 export default {
 	props: {
 		list: Array,
+		info: Object,
 	},
 	data() {
 		return {

@@ -3,10 +3,10 @@
 	<v-card outlined>
 		<e-card-head-1 title="Project Settings">
 			<div>
-				Update the settings of demo1
+				Update the settings of {{ info.name || 'project' }}
 			</div>
 		</e-card-head-1>
-		<e-side-menus :list="menus"></e-side-menus>
+		<e-side-menus :list="menus" :info="info"></e-side-menus>
 	</v-card>
 </div>
 </template>
@@ -14,6 +14,7 @@
 <script>
 export default {
 	data() {
+		const { id } = this.$route.params
 		return {
 			menus: [
 				{
@@ -36,9 +37,27 @@ export default {
 					text: 'Advanced',
 					comp: 'st-advanced',
 				},
-			]
+			],
+			id,
+			info: {},
 		}
 	},
-	
+	mounted() {
+		this.getInfo()
+	},
+	methods: {
+		async getInfo() {
+			try {
+				this.$loading()
+				const { data } = await this.$http.get('/project/config/' + this.id)
+				this.info = data
+			} catch (error) {
+				this.$alert(error.message).then(() => {
+					this.getInfo()
+				})
+			}
+			this.$loading.close()
+		},
+	},
 }
 </script>
