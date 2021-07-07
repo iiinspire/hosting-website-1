@@ -8,7 +8,7 @@
 		<div class="mt-8 d-flex">
 			<v-text-field outlined dense v-model="name">
 				<template #prepend v-if="!asMobile">
-					<span class="mt-1 fz-14 color-1">4everland.com/demo/</span>
+					<span class="mt-1 fz-14 color-1">4everland.com/{{ userInfo.username}}/</span>
 				</template>
 			</v-text-field>
 			<v-btn color="primary" :loading="savingName" @click="onSaveName"
@@ -69,6 +69,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 import frameworks from '../../assets/frameworks.json'
 
 export default {
@@ -76,6 +77,9 @@ export default {
 		info: Object,
 	},
 	computed: {
+		...mapState({
+			userInfo: s => s.userInfo,
+		}),
 		asMobile() {
 			return this.$vuetify.breakpoint.smAndDown
 		},
@@ -120,7 +124,7 @@ export default {
 				await this.saveProject({
 					name: this.name,
 				})
-				this.$notice('Rename successfully')
+				this.$notice('Project renamed successfully')
 			} catch (error) {
 				// 
 			}

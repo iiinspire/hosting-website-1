@@ -50,13 +50,13 @@ export default {
 			try {
 				this.$loading()
 				const { data } = await this.$http.get('/project/config/' + this.id)
+				this.$loading.close()
 				this.info = data
 			} catch (error) {
 				this.$alert(error.message).then(() => {
 					this.getInfo()
 				})
 			}
-			this.$loading.close()
 		},
 	},
 }

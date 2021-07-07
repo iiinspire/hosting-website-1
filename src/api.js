@@ -24,14 +24,16 @@ http.interceptors.response.use(res => {
 		if(data.code != 200) {
 			let msg = data.message || `${data.code} error`
 			Vue.prototype.$loading.close()
-			console.log(msg)
+			// console.log(msg)
 			
 			if(data.code == 401) {
 				localStorage.clear()
 				router.replace('/')
 			}
 			else {
-				Vue.prototype.$alert(msg)
+				setTimeout(() => {
+					Vue.prototype.$alert(msg)
+				}, 10);
 			}
 			throw new Error(msg)
 		}
@@ -43,7 +45,7 @@ http.interceptors.response.use(res => {
 }, error => {
 	const { config = {},  data = {}, status, statusText } = error.response || {}
 	console.log(error, status, statusText)
-	let msg = data.msg || statusText || (status ? `${config.url}：${status}` : error.message)
+	let msg = data.message || statusText || (status ? `${config.url}：${status}` : error.message)
 	if(status == 401) {
 		router.replace('/')
 	}

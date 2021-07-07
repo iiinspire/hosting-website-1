@@ -35,7 +35,7 @@
 			</div>
 		</div>
 		<div class="pd-10-20 bdt-1 bg-f8 d-flex">
-			<v-btn color="error" small class="ml-auto">Delete</v-btn>
+			<v-btn color="error" small class="ml-auto" @click="onDelete">Delete</v-btn>
 		</div>
 	</div>
 </div>
@@ -53,6 +53,11 @@ export default {
 			isStatis: false,
 		}
 	},
+	computed: {
+		userInfo() {
+			return this.$store.state.userInfo
+		},
+	},
 	watch: {
 		async directoryList(val) {
 			try {
@@ -60,13 +65,36 @@ export default {
 				await this.saveProject({
 					directoryList: val,
 				})
+				this.$loading.close()
 			} catch (error) {
 				this.directoryList = !val
 			}
-			this.$loading.close()
 		}
 	},
 	methods: {
+		async onDelete() {
+			try {
+				let html = '4everland will delete all of your projects，along with all of its Deployments, Domains, SSL Certificates, and all other resources belonging to your project.'
+				html += '<div class="bg-warning pd-10-20 fz-14 mt-3">Warning: This action is not reversible.Please be certain</div>'
+				const { username } = this.userInfo
+				await this.$prompt(html, 'Delete Project', {
+					inputAttrs: {
+						label: `Enter your name ${username} to continue`,
+						rules: [
+							v => v == username || 'incorrect',
+						],
+						required: true,
+					}
+				})
+				this.$loading()
+				await this.$http.delete('/project/' + this.info.projectId)
+				this.$loading.close()
+				await this.$alert('Project deleted successfully')
+				this.$router.replace('/')
+			} catch (error) {
+				console.log(error)
+			}
+		},
 		async saveProject(body) {
 			return this.$http.put('/project/config/' + this.info.projectId, body)
 		},

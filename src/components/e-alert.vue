@@ -32,7 +32,12 @@
 				{{ alertInfo.title ? alertInfo.title : (alertInfo.showCancel ? 'Confirm' : 'Alert') }}
 			</v-card-title>
 			<v-card-text>
-				<div class="fz-16">{{ alertInfo.content }}</div>
+				<div class="fz-16" v-html="alertInfo.content"></div>
+				<div class="mt-8" v-if="alertInfo.showInput">
+					<v-form ref="form" lazy-validation>
+						<v-text-field v-model="inputVal" dense v-bind="alertInfo.inputAttrs"></v-text-field>
+					</v-form>
+				</div>
 			</v-card-text>
 			<v-card-actions>
 				<v-spacer></v-spacer>
@@ -66,6 +71,7 @@ export default {
 			showAlert: false,
 			showLoading: false,
 			showSnackbar: false,
+			inputVal: '',
 		}
 	},
 	watch: {
@@ -82,14 +88,17 @@ export default {
 	created() {
 		const showModal = config => {
 			return new Promise((resolve, reject) => {
+				if(config.showInput) {
+					this.inputVal = config.defaultValue || ''
+				}
 				this.$setState({
 					alertInfo: {
 						...config,
-						success() {
-							resolve()
+						success(e) {
+							resolve(e)
 						},
-						fail() {
-							reject()
+						fail(e) {
+							reject(e)
 						},
 					},
 				})
@@ -111,6 +120,7 @@ export default {
 		}
 
 		Vue.prototype.$alert = (content, title, opts={}) => {
+			console.log(content, '$alert')
 			return showModal({
 				title,
 				content,
@@ -125,6 +135,15 @@ export default {
 				...opts,
 			})
 		}
+		Vue.prototype.$prompt = (content, title, opts={}) => {
+			return showModal({
+				title,
+				content,
+				showCancel: true,
+				showInput: true,
+				...opts,
+			})
+		}
 		Vue.prototype.$notice = (content, attrs={}, opts={}) => {
 			return showModal({
 				type: 'snackbar',
@@ -135,14 +154,23 @@ export default {
 		}
 	},
 	methods: {
-		hideAlert(isOk) {
-			this.showAlert = false
-			const { success, fail } = this.alertInfo
+		async hideAlert(isOk) {
+			const { success, fail, showInput } = this.alertInfo
 			if(isOk) {
-				if(success) success()
+				let body = {}
+				if(showInput) {
+					const valid = this.$refs.form.validate()
+					if(!valid) {
+						// fail(new Error('incorrent input'))
+						return
+					}
+					body.value = this.inputVal
+				}
+				if(success) success(body)
 			} else {
 				if(fail) fail()
 			}
+			this.showAlert = false
 		},
 	}
 }
