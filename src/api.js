@@ -42,7 +42,7 @@ http.interceptors.response.use(res => {
 	return res
 }, error => {
 	const { config = {},  data = {}, status, statusText } = error.response || {}
-	// console.log(status, statusText)
+	console.log(error, status, statusText)
 	let msg = data.msg || statusText || (status ? `${config.url}：${status}` : error.message)
 	if(status == 401) {
 		router.replace('/')

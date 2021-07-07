@@ -7,7 +7,7 @@
 				If no index file is present within a directory, the directory contents will be displayed.
 			</div>
 			<div class="mt-3">
-				<v-switch v-model="isListing" :label="isListing ? 'Enabled' : 'Disabled'"></v-switch>
+				<v-switch v-model="directoryList" :label="directoryList ? 'Enabled' : 'Disabled'"></v-switch>
 			</div>
 		</div>
 		<div class="pd-15-20 bdt-1 bg-f8">
@@ -43,11 +43,33 @@
 
 <script>
 export default {
+	props: {
+		info: Object,
+	},
 	data() {
+		const { directoryList } = this.info
 		return {
-			isListing: false,
+			directoryList,
 			isStatis: false,
 		}
-	}
+	},
+	watch: {
+		async directoryList(val) {
+			try {
+				this.$loading()
+				await this.saveProject({
+					directoryList: val,
+				})
+			} catch (error) {
+				this.directoryList = !val
+			}
+			this.$loading.close()
+		}
+	},
+	methods: {
+		async saveProject(body) {
+			return this.$http.put('/project/config/' + this.info.projectId, body)
+		},
+	},
 }
 </script>
