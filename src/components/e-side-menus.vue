@@ -1,7 +1,7 @@
 <template>
 <div v-if="asMobile">
 	<!-- :value="0" -->
-	<v-expansion-panels accordion>
+	<v-expansion-panels accordion v-model="curIdx">
 		<v-expansion-panel
 			v-for="(it, i) in list" :key="i">
 			<v-expansion-panel-header>

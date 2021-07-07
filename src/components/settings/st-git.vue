@@ -43,6 +43,7 @@
 				Learn more about <a href="" target="_blank">Production Branch</a>
 			</div>
 			<v-btn :disabled="currentBranch == info.currentBranch"
+				:loading="savingBranch" @click="setBranch"
 				color="primary" small class="ml-auto">Save</v-btn>
 		</div>
 	</div>
@@ -76,7 +77,8 @@ export default {
 		const { currentBranch } = this.info
 		return {
 			currentBranch,
-			branches: []
+			branches: [],
+			savingBranch: false,
 		}
 	},
 	computed: {
@@ -97,6 +99,18 @@ export default {
 			} catch (error) {
 				console.log(error)
 			}
+		},
+		async setBranch() {
+			try {
+				this.savingBranch = true
+				await this.$http.put('/project/branch/git/' + this.info.projectId, {
+					name: this.currentBranch,
+				})
+				this.$notice('Updated Production Branch successfully.')
+			} catch (error) {
+				// 
+			}
+			this.savingBranch = false
 		},
 	},
 }
