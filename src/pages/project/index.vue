@@ -21,7 +21,15 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
+
 export default {
+	computed: {
+		...mapState({
+			projectMap: s => s.projectMap,
+			noticeMsg: s => s.noticeMsg,
+		}),
+	},
 	data() {
 		const { id } = this.$route.params
 		return {
@@ -42,6 +50,35 @@ export default {
 				},
 			]
 		}
+	},
+	watch: {
+		noticeMsg({ name }) {
+			if(name == 'updateProject') this.getInfo()
+		},
+	},
+	mounted() {
+		this.getInfo()
+	},
+	methods: {
+		async getInfo() {
+			try {
+				if(!this.info) this.$loading()
+				const res = await this.$http.get('/project/' + this.id)
+				const { repo } = res.data
+				repo.pathPre = `${repo.namespace}/${repo.name}`
+				const { data } = await this.$http.get('/project/config/' + this.id)
+				data.repo = repo
+				this.$loading.close()
+				this.info = data
+				this.$setState({
+					projectInfo: data,
+				})
+			} catch (error) {
+				this.$alert(error.message).then(() => {
+					this.getInfo()
+				})
+			}
+		},
 	},
 }
 </script>

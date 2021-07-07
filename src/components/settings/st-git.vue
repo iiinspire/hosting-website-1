@@ -9,7 +9,7 @@
 			<div class="pd-15-20 mt-5 bd-1 d-flex al-c">
 				<v-icon color="#4A96FA" size="32">mdi-github</v-icon>
 				<div class="ml-5">
-					<h3 class="color-1">demo/demo</h3>
+					<h3 class="color-1">{{ info.repo.pathPre }}</h3>
 					<div class="gray fz-13">
 						Connected 2d ago
 					</div>
@@ -32,16 +32,18 @@
 				By default,every commit pushed to the 'main' branch will trigger a Production Deployment instead of the usual Preview Deployment. You can switch to a different branch here.
 			</div>
 			<div class="mt-3">
-				<v-select v-model="form.branch"
+				<v-select v-model="currentBranch"
 					:items="branches"
 					label="Select Branch">
 				</v-select>
 			</div>
 		</div>
-		<div class="pd-15-20 bdt-1 bg-f8">
+		<div class="pd-10-20 bdt-1 bg-f8 d-flex al-c">
 			<div class="gray fz-12">
 				Learn more about <a href="" target="_blank">Production Branch</a>
 			</div>
+			<v-btn :disabled="currentBranch == info.currentBranch"
+				color="primary" small class="ml-auto">Save</v-btn>
 		</div>
 	</div>
 
@@ -67,17 +69,34 @@
 
 <script>
 export default {
+	props: {
+		info: Object,
+	},
 	data() {
+		const { currentBranch } = this.info
 		return {
-			form: {
-				branch: '',
-			},
-			branches: ['main', 'test']
+			currentBranch,
+			branches: []
 		}
 	},
 	computed: {
 		asMobile() {
 			return this.$vuetify.breakpoint.smAndDown
+		},
+	},
+	mounted() {
+		this.getBranch()
+	},
+	methods: {
+		async getBranch() {
+			try {
+				const { repo: {name}, projectId: id } = this.info
+				const { data } = await this.$http.get(`/project/branch/${name}/${id}`)
+				console.log(data)
+				this.branches = [data.current, ...(data.other || [])]
+			} catch (error) {
+				console.log(error)
+			}
 		},
 	},
 }

@@ -46,8 +46,18 @@ export default {
 		info: Object,
 	},
 	data() {
+		const { tab = 0 } = this.$route.query
 		return {
-			curIdx: 0,
+			curIdx: tab*1,
+		}
+	},
+	watch: {
+		curIdx(tab) {
+			this.$router.replace({
+				query: {
+					tab,
+				}
+			})
 		}
 	},
 	computed: {

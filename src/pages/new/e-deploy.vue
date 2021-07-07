@@ -226,7 +226,7 @@ export default {
 				}
 				else body.buildCommand = 'npm run build'
 			}
-			body.buildCommand = ` ${body.buildCommand.replace(/`/g, '')} `
+			body.buildCommand = body.buildCommand.replace(/`/g, '')
 			console.log(body)
 			try {
 				this.creating = true

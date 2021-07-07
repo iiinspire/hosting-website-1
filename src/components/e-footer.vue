@@ -11,6 +11,7 @@
 			'mr-10': !$vuetify.breakpoint.mobile,
 		}">
 			<img src="img/icon.svg" style="height: 30px" />
+			<!-- <e-logo class="d-b"></e-logo> -->
 			<div class="mt-10">
 				<v-btn icon :href="item.link" target="_blank" class="mr-2"
 					v-for="(item, i) in links" :key="i">

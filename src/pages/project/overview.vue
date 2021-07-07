@@ -4,10 +4,10 @@
 <template>
 <div>
 	<v-card outlined>
-		<e-card-head-1 title="demo-app1">
+		<e-card-head-1 :title="info.name || '*'">
 			<div class="">
 				<v-icon color="#fff" size="16">mdi-github</v-icon>
-				<span class="ml-1">demo/demo-app1</span>
+				<span class="ml-1">{{ info.repo ? info.repo.pathPre : '*' }}</span>
 			</div>
 			<template #right>
 				<v-btn small depressed color="primary">Visit</v-btn>
@@ -31,3 +31,21 @@
 	</v-card>
 </div>
 </template>
+
+<script>
+export default {
+	data() {
+		return {
+
+		}
+	},
+	computed: {
+		userInfo() {
+			return this.$store.state.userInfo
+		},
+		info() {
+			return this.$store.state.projectInfo
+		},
+	},
+}
+</script>

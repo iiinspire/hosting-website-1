@@ -124,6 +124,11 @@ export default {
 				await this.saveProject({
 					name: this.name,
 				})
+				this.$setState({
+					noticeMsg: {
+						name: 'updateProject',
+					},
+				})
 				this.$notice('Project renamed successfully')
 			} catch (error) {
 				// 

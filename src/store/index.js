@@ -12,13 +12,14 @@ const store = new Vuex.Store({
 		isTouch: 'ontouchstart' in window,
 		isFocus: true,
 		appInfo: {
-			title: '健身',
+			title: '',
 		},
 		token: localStorage.token,
 		loginSta: 0,
 		userInfo: {},
 		noticeMsg: {},
 		alertInfo: {},
+		projectInfo: {},
 	},
 	mutations: {
 		[SET_DATA](state, data) {

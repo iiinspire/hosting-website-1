@@ -75,7 +75,7 @@ export default {
 		async onDelete() {
 			try {
 				let html = '4everland will delete all of your projects，along with all of its Deployments, Domains, SSL Certificates, and all other resources belonging to your project.'
-				html += '<div class="bg-warning pd-10-20 fz-14 mt-3">Warning: This action is not reversible.Please be certain</div>'
+				html += '<div class="bg-warning pd-10-20 fz-14 mt-3"><b>Warning</b>: This action is not reversible.Please be certain</div>'
 				const { username } = this.userInfo
 				await this.$prompt(html, 'Delete Project', {
 					inputAttrs: {
