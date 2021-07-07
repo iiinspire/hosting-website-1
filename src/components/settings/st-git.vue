@@ -11,11 +11,15 @@
 				<div class="ml-5">
 					<h3 class="color-1">{{ info.repo.pathPre }}</h3>
 					<div class="gray fz-13">
-						Connected 2d ago
+						Connected at {{ new Date(info.repo.updateAt).toNiceTime(nowDate) }}
 					</div>
-					<v-btn class="mt-2" outlined color="#888" small v-if="asMobile">Disconnect</v-btn>
+					<v-btn class="mt-2" @click="setConnect"
+						:loading="savingConnect"
+						outlined color="#888" small v-if="asMobile">Disconnect</v-btn>
 				</div>
-				<v-btn class="ml-auto" outlined color="#888" small v-if="!asMobile">Disconnect</v-btn>
+				<v-btn class="ml-auto" @click="setConnect"
+					:loading="savingConnect"
+					outlined color="#888" small v-if="!asMobile">Disconnect</v-btn>
 			</div>
 		</div>
 		<div class="pd-15-20 bdt-1 bg-f8">
@@ -29,7 +33,7 @@
 		<div class="pd-20">
 			<h3>Production Branch</h3>
 			<div class="gray mt-1 fz-14">
-				By default,every commit pushed to the 'main' branch will trigger a Production Deployment instead of the usual Preview Deployment. You can switch to a different branch here.
+				By default,every commit pushed to the <span class="color-1">`main`</span> branch will trigger a Production Deployment instead of the usual Preview Deployment. You can switch to a different branch here.
 			</div>
 			<div class="mt-3">
 				<v-select v-model="currentBranch"
@@ -83,6 +87,9 @@ export default {
 		asMobile() {
 			return this.$vuetify.breakpoint.smAndDown
 		},
+		nowDate() {
+			return this.$store.state.nowDate
+		},
 	},
 	mounted() {
 		this.getBranch()
@@ -98,6 +105,18 @@ export default {
 				console.log(error)
 			}
 		},
+		async setConnect() {
+			try {
+				const { projectId: id, repoId } = this.info
+				let url = `/project/repo/${id}/${repoId}`
+				url = '/project/repo/' + id
+				this.savingConnect = true
+				await this.$http.put(url)
+			} catch (error) {
+				// 
+			}
+			this.savingConnect = false
+		}
 	},
 }
 </script>

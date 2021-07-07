@@ -64,7 +64,7 @@ export default {
 			try {
 				if(!this.info) this.$loading()
 				const res = await this.$http.get('/project/' + this.id)
-				const { repo } = res.data
+				const { repo={} } = res.data
 				repo.pathPre = `${repo.namespace}/${repo.name}`
 				const { data } = await this.$http.get('/project/config/' + this.id)
 				data.repo = repo

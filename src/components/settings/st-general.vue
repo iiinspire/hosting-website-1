@@ -36,18 +36,29 @@
 			</v-select>
 			<div class="d-flex al-c">
 				<v-text-field persistent-placeholder v-model="form.buildCommand"
-					label="Build command" :disabled="!isOverBuild"
+					label="Build command" :disabled="!overForm.buildCommand"
 					:placeholder="buildCommandHint"/>
-				<v-switch v-model="isOverBuild" label="Override" class="ml-5"></v-switch>
+				<v-switch v-model="overForm.buildCommand" @change="onSwith('buildCommand')" 
+					label="Override" class="ml-5"></v-switch>
 			</div>
 			<div class="d-flex al-c">
 				<v-text-field persistent-placeholder v-model="form.outputDirectory"
-					label="Output Directory" :disabled="!isOverOutput"
+					label="Output Directory" :disabled="!overForm.outputDirectory"
 					placeholder="`public` if it exists, or `. `"/>
-				<v-switch v-model="isOverOutput" label="Override" class="ml-5"></v-switch>
+				<v-switch v-model="overForm.outputDirectory" @change="onSwith('outputDirectory')" 
+					label="Override" class="ml-5"></v-switch>
+			</div>
+			<div class="d-flex al-c">
+				<v-text-field persistent-placeholder v-model="form.installCommand"
+					label="Install Command" :disabled="!overForm.installCommand"
+					placeholder="‘yarn install’ or ‘npm install’"/>
+				<v-switch v-model="overForm.installCommand" @change="onSwith('installCommand')" 
+					label="Override" class="ml-5"></v-switch>
 			</div>
 			<div class="ta-r mt-3">
-				<v-btn color="primary" small>Save</v-btn>
+				<v-btn :disabled="!isCmdChange"
+					:loading="savingCmd" @click="onSaveCmd"
+					color="primary">Save</v-btn>
 			</div>
 		</div>
 	</div>
@@ -62,6 +73,7 @@
 
 			</v-text-field>
 			<v-btn color="primary" :disabled="rootDirectory == info.rootDirectory"
+				:loading="savingRoot" @click="onSaveRoot"
 				class="ml-4" style="margin-top: 2px;">Save</v-btn>
 		</div>
 	</div>
@@ -86,36 +98,84 @@ export default {
 		chooseFramework() {
 			return this.frameworks.filter(it => it.slug == this.form.framework)[0]
 		},
+		isCmdChange() {
+			let changed = false
+			for(const key in this.form) {
+				let val = this.info[key] || ''
+				if(this.form[key] != val) changed = true
+			}
+			return changed
+		},
 	},
 	data() {
 		const { name, rootDirectory } = this.info
 		const form = {
 			framework: '',
-			buildCommand: '',
 			outputDirectory: '',
+			buildCommand: '',
+			installCommand: '',
 		}
+		const overForm = {}
 		for(const key in form) {
-			form[key] = this.info[key]
+			const val = form[key] = this.info[key] || ''
+			if(val) overForm[key] = true
 		}
 		return {
 			name,
 			rootDirectory,
 			form,
+			overForm,
 			frameworks,
 			buildCommandHint: '',
 			isOverBuild: false,
 			isOverOutput: false,
+			isOverInstall: false,
 			savingName: false,
-			savingBuild: false,
+			savingCmd: false,
 			savingRoot: false,
 		}
 	},
 	mounted() {
-		
+		this.onFramework(this.form.framework)
 	},
 	methods: {
+		onSwith(key) {
+			const isOver = this.overForm[key]
+			this.form[key] = isOver ? (this.info[key] || '') : ''
+		},
 		async saveProject(body) {
-			return this.$http.put('/project/config/' + this.info.projectId, body)
+			await this.$http.put('/project/config/' + this.info.projectId, body)
+			this.$setState({
+				projectInfo: {
+					...this.info,
+					...body,
+				},
+				noticeMsg: {
+					name: 'updateProject',
+				},
+			})
+		},
+		async onSaveRoot() {
+			try {
+				this.savingRoot = true
+				await this.saveProject({
+					rootDirectory: this.rootDirectory,
+				})
+				this.$notice('Project updated successfully')
+			} catch (error) {
+				// 
+			}
+			this.savingRoot = false
+		},
+		async onSaveCmd() {
+			try {
+				this.savingCmd = true
+				await this.saveProject(this.form)
+				this.$notice('Project updated successfully')
+			} catch (error) {
+				// 
+			}
+			this.savingCmd = false
 		},
 		async onSaveName() {
 			try {
@@ -123,11 +183,6 @@ export default {
 				this.savingName = true
 				await this.saveProject({
 					name: this.name,
-				})
-				this.$setState({
-					noticeMsg: {
-						name: 'updateProject',
-					},
 				})
 				this.$notice('Project renamed successfully')
 			} catch (error) {
