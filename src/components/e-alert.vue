@@ -120,7 +120,6 @@ export default {
 		}
 
 		Vue.prototype.$alert = (content, title, opts={}) => {
-			console.log(content, '$alert')
 			return showModal({
 				title,
 				content,

@@ -62,7 +62,7 @@ export default {
 	methods: {
 		async getInfo() {
 			try {
-				if(!this.info) this.$loading()
+				this.$loading()
 				const res = await this.$http.get('/project/' + this.id)
 				const { repo={} } = res.data
 				repo.pathPre = `${repo.namespace}/${repo.name}`

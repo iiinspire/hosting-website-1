@@ -121,7 +121,6 @@ export default {
 		this.getList()
 	},
 	methods: {
-		
 		onImport(it) {
 			this.importItem = it
 			this.showSelect = true

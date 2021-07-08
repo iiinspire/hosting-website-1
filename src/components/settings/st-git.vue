@@ -6,20 +6,40 @@
 			<div class="gray mt-1 fz-14">
 				Seamlessly creat Deployments for any commits pushed to your Git repository.
 			</div>
-			<div class="pd-15-20 mt-5 bd-1 d-flex al-c">
-				<v-icon color="#4A96FA" size="32">mdi-github</v-icon>
-				<div class="ml-5">
-					<h3 class="color-1">{{ info.repo.pathPre }}</h3>
-					<div class="gray fz-13">
-						Connected at {{ new Date(info.repo.updateAt).toNiceTime(nowDate) }}
+			<div class="mt-5 bd-1">
+				<div class="pd-15-20 d-flex al-c" v-if="repoName">
+					<v-icon color="#4A96FA" size="32">mdi-github</v-icon>
+					<div class="ml-5">
+						<h3 class="color-1">{{ info.repo.pathPre }}</h3>
+						<div class="gray fz-13">
+							Connected at {{ new Date(info.repo.updateAt).toNiceTime(nowDate) }}
+						</div>
+						<v-btn class="mt-2" @click="setConnect()"
+							:loading="savingConnect"
+							outlined color="#888" small v-if="asMobile">Disconnect</v-btn>
 					</div>
-					<v-btn class="mt-2" @click="setConnect"
+					<v-btn class="ml-auto" @click="setConnect()"
 						:loading="savingConnect"
-						outlined color="#888" small v-if="asMobile">Disconnect</v-btn>
+						outlined color="#888" small v-if="!asMobile">Disconnect</v-btn>
 				</div>
-				<v-btn class="ml-auto" @click="setConnect"
-					:loading="savingConnect"
-					outlined color="#888" small v-if="!asMobile">Disconnect</v-btn>
+				<template v-else>
+					<div class="pd-15-20" v-if="!repoList || !repoList.length">
+						<v-btn :loading="listing" @click="getRepoList">
+							<v-icon>mdi-github</v-icon>
+							<span>Connect Github</span>
+						</v-btn>
+					</div>
+					<div v-else>
+						<div class="pd-20 d-flex al-c"
+							v-for="(it, i) in repoList" :key="i">
+							<span class="fz-17 line-1">{{ it.name }}</span>
+							<!-- <span class="ml-3 mr-3 gray fz-13 shrink-0">
+								{{ new Date(it.updateAt).toNiceTime(nowDate) }}
+							</span> -->
+							<v-btn class="ml-auto" color="primary" small @click="onConnect(it)">Connect</v-btn>
+						</div>
+					</div>
+				</template>
 			</div>
 		</div>
 		<div class="pd-15-20 bdt-1 bg-f8">
@@ -29,102 +49,148 @@
 		</div>
 	</div>
 
-	<div class="bd-1 mt-5">
-		<div class="pd-20">
-			<h3>Production Branch</h3>
-			<div class="gray mt-1 fz-14">
-				By default,every commit pushed to the <span class="color-1">`main`</span> branch will trigger a Production Deployment instead of the usual Preview Deployment. You can switch to a different branch here.
+	<template v-if="repoName">
+		<div class="bd-1 mt-5">
+			<div class="pd-20">
+				<h3>Production Branch</h3>
+				<div class="gray mt-1 fz-14">
+					By default,every commit pushed to the <span class="color-1">`main`</span> branch will trigger a Production Deployment instead of the usual Preview Deployment. You can switch to a different branch here.
+				</div>
+				<div class="mt-3">
+					<v-select v-model="currentBranch"
+						:items="branches"
+						label="Select Branch">
+					</v-select>
+				</div>
 			</div>
-			<div class="mt-3">
-				<v-select v-model="currentBranch"
-					:items="branches"
-					label="Select Branch">
-				</v-select>
+			<div class="pd-10-20 bdt-1 bg-f8 d-flex al-c">
+				<div class="gray fz-12">
+					Learn more about <a href="" target="_blank">Production Branch</a>
+				</div>
+				<v-btn :disabled="currentBranch == info.currentBranch"
+					:loading="savingBranch" @click="setBranch"
+					color="primary" small class="ml-auto">Save</v-btn>
 			</div>
 		</div>
-		<div class="pd-10-20 bdt-1 bg-f8 d-flex al-c">
-			<div class="gray fz-12">
-				Learn more about <a href="" target="_blank">Production Branch</a>
-			</div>
-			<v-btn :disabled="currentBranch == info.currentBranch"
-				:loading="savingBranch" @click="setBranch"
-				color="primary" small class="ml-auto">Save</v-btn>
-		</div>
-	</div>
 
-	<div class="bd-1 mt-5">
-		<div class="pd-20">
-			<h3>Deploy Hooks</h3>
-			<div class="gray mt-1 fz-14">
-				Deploy hooks are unique URLs that allow you to trigger a deployment of a given branch.
-				This project does not have any deploy hooks.
+		<div class="bd-1 mt-5">
+			<div class="pd-20">
+				<h3>Deploy Hooks</h3>
+				<div class="gray mt-1 fz-14">
+					Deploy hooks are unique URLs that allow you to trigger a deployment of a given branch.
+					This project does not have any deploy hooks.
+				</div>
+				<div class="mt-3">
+					<h3></h3>
+				</div>
 			</div>
-			<div class="mt-3">
-				<h3></h3>
+			<div class="pd-15-20 bdt-1 bg-f8">
+				<div class="gray fz-12">
+					Learn more about <a href="" target="_blank">Deploy Hooks</a>
+				</div>
 			</div>
 		</div>
-		<div class="pd-15-20 bdt-1 bg-f8">
-			<div class="gray fz-12">
-				Learn more about <a href="" target="_blank">Deploy Hooks</a>
-			</div>
-		</div>
-	</div>
+	</template>
 </div>
 </template>
 
 <script>
+import { mapState } from 'vuex'
+
 export default {
 	props: {
 		info: Object,
 	},
 	data() {
-		const { currentBranch, repo: { name } } = this.info
+		const { currentBranch } = this.info
 		return {
 			savingConnect: false,
 			currentBranch,
 			branches: [],
-			repoName: name,
 			savingBranch: false,
+			listing: false,
+			repoList: null,
 		}
 	},
 	computed: {
+		...mapState({
+			isFocus: s => s.isFocus,
+			nowDate: s => s.nowDate,
+		}),
 		asMobile() {
 			return this.$vuetify.breakpoint.smAndDown
 		},
-		nowDate() {
-			return this.$store.state.nowDate
+		repoName() {
+			return this.info.repo.name
+		},
+	},
+	watch: {
+		info() {
+			this.getBranch()
+		},
+		isFocus(val) {
+			if(val && this.isAddClick) {
+				this.isAddClick = false
+				this.getRepoList()
+			}
 		},
 	},
 	mounted() {
 		this.getBranch()
 	},
 	methods: {
-		async getBranch() {
-			const { repo: {name} } = this.info
-			if(!name) return
-			try {
-				const { data } = await this.$http.get(`/project/branch/${name}`)
-				console.log(data)
-				this.branches = [data.current, ...(data.other || [])]
-			} catch (error) {
-				console.log(error)
-			}
+		onConnect(it) {
+			this.setConnect(it.id)
 		},
-		async setConnect() {
+		async getRepoList() {
 			try {
-				const { projectId: id, repoId } = this.info
-				let url = `/project/repo/${id}/${repoId}`
-				let method = 'put'
-				if(this.repoName) {
-					url = '/project/repo/' + id
-					method = 'delete'
+				this.listing = true
+				const { data } = await this.$http.get('/repo/list')
+				if(!data.length) {
+					this.isAddClick = true
+					this.$openWindow('https://github.com/apps/foreverlandxyz/installations/new')
+				}
+				this.repoList = data
+			} catch (error) {
+				// 
+			}
+			this.listing = false
+		},
+		onUpdted() {
+			this.$setState({
+				noticeMsg: {
+					name: 'updateProject',
+				},
+			})
+		},
+		async setConnect(repoId) {
+			try {
+				const { projectId: id } = this.info
+				let url = '/project/repo/' + id
+				let method = 'delete'
+				if(repoId) {
+					url = `/project/repo/${id}/${repoId}`
+					method = 'put'
+					this.$loading()
 				}
 				this.savingConnect = true
 				await this.$http[method](url)
+				this.onUpdted()
 			} catch (error) {
 				// 
 			}
 			this.savingConnect = false
+			this.$loading.close()
+		},
+		async getBranch() {
+			if(!this.repoName) return
+			try {
+				const { data } = await this.$http.get(`/project/branch/${this.info.projectId}`)
+				// console.log(data)
+				this.branches = [data.current, ...(data.other || [])]
+			} catch (error) {
+				console.log(error)
+			}
 		},
 		async setBranch() {
 			try {
@@ -132,6 +198,7 @@ export default {
 				await this.$http.put('/project/branch/git/' + this.info.projectId, {
 					name: this.currentBranch,
 				})
+				this.onUpdted()
 				this.$notice('Updated Production Branch successfully.')
 			} catch (error) {
 				// 

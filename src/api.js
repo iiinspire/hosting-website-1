@@ -25,7 +25,6 @@ http.interceptors.response.use(res => {
 			let msg = data.message || `${data.code} error`
 			Vue.prototype.$loading.close()
 			// console.log(msg)
-			
 			if(data.code == 401) {
 				localStorage.clear()
 				router.replace('/')
