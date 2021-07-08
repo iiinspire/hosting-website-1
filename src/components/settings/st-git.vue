@@ -77,10 +77,12 @@ export default {
 		info: Object,
 	},
 	data() {
-		const { currentBranch } = this.info
+		const { currentBranch, repo: { name } } = this.info
 		return {
+			savingConnect: false,
 			currentBranch,
-			branches: []
+			branches: [],
+			repoName: name,
 		}
 	},
 	computed: {
@@ -96,9 +98,10 @@ export default {
 	},
 	methods: {
 		async getBranch() {
+			const { repo: {name} } = this.info
+			if(!name) return
 			try {
-				const { repo: {name}, projectId: id } = this.info
-				const { data } = await this.$http.get(`/project/branch/${name}/${id}`)
+				const { data } = await this.$http.get(`/project/branch/${name}`)
 				console.log(data)
 				this.branches = [data.current, ...(data.other || [])]
 			} catch (error) {
@@ -109,9 +112,13 @@ export default {
 			try {
 				const { projectId: id, repoId } = this.info
 				let url = `/project/repo/${id}/${repoId}`
-				url = '/project/repo/' + id
+				let method = 'put'
+				if(this.repoName) {
+					url = '/project/repo/' + id
+					method = 'delete'
+				}
 				this.savingConnect = true
-				await this.$http.put(url)
+				await this.$http[method](url)
 			} catch (error) {
 				// 
 			}

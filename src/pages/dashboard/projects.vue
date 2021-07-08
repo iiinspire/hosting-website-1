@@ -45,7 +45,7 @@
 				<v-divider></v-divider>
 
 				<v-card-subtitle>
-					<div class="d-flex al-c">
+					<div class="d-flex al-c" v-if="it.repo">
 						<v-icon :color="$color1">mdi-github</v-icon>
 						<span class="ml-2 line-1">{{ it.repo.namespace }}/{{ it.name }}</span>
 						<span class="ml-auto gray shrink-0">
