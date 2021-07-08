@@ -1,10 +1,10 @@
 <template>
 <div>
-	<v-snackbar color="primary" timeout="2000" v-bind="alertInfo.attrs" 
+	<v-snackbar color="primary" timeout="2000" v-bind="noticeInfo.attrs" 
 		v-model="showSnackbar">
-		{{ alertInfo.content }}
+		{{ noticeInfo.content }}
 		<template #action>
-			<v-btn  text @click="showSnackbar = false">
+			<v-btn text @click="showSnackbar = false">
 				close
 			</v-btn>
 		</template>
@@ -72,6 +72,7 @@ export default {
 			showLoading: false,
 			showSnackbar: false,
 			inputVal: '',
+			noticeInfo: {},
 		}
 	},
 	watch: {
@@ -144,12 +145,13 @@ export default {
 			})
 		}
 		Vue.prototype.$notice = (content, attrs={}, opts={}) => {
-			return showModal({
+			this.noticeInfo = {
 				type: 'snackbar',
 				content,
 				attrs,
 				...opts,
-			})
+			}
+			this.showSnackbar = true
 		}
 	},
 	methods: {
