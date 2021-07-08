@@ -118,7 +118,7 @@ export default {
 		const overForm = {}
 		for(const key in form) {
 			const val = form[key] = this.info[key] || ''
-			if(val) overForm[key] = true
+			overForm[key] = !!val
 		}
 		return {
 			name,
@@ -136,11 +136,12 @@ export default {
 		}
 	},
 	mounted() {
-		this.onFramework(this.form.framework)
+		this.onFramework(this.form.framework, true)
 	},
 	methods: {
 		onSwith(key) {
 			const isOver = this.overForm[key]
+			// console.log(key)
 			this.form[key] = isOver ? (this.info[key] || '') : ''
 		},
 		async saveProject(body) {
@@ -190,10 +191,12 @@ export default {
 			}
 			this.savingName = false
 		},
-		onFramework(val) {
+		onFramework(val, isInit) {
 			const item = this.frameworks.filter(it => it.slug == val)[0]
 			const { buildCommand } = item.settings
-			this.form.buildCommand = buildCommand.value || ''
+			if(!this.form.buildCommand && !isInit) {
+				this.form.buildCommand = buildCommand.value || ''
+			}
 			this.buildCommandHint = buildCommand.placeholder || ''
 		},
 	}

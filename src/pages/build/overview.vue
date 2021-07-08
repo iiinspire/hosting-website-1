@@ -24,7 +24,7 @@
 					<div class="mt-5">
 						<div class="d-flex">
 							<v-btn color="error" class="flex-1" 
-								@click="getBuild('60dc452d39d33700072a1526')">
+								@click="startBuild">
 								Redeploy
 							</v-btn>
 							<v-btn color="primary" class="ml-5 flex-1">Visit</v-btn>
@@ -72,17 +72,17 @@ export default {
 		
 	},
 	methods: {
-		async getBuild(id) {
+		async startBuild() {
 			try {
-				const { data } = await this.$http.post(`/project/${id}/build`)
+				const { data } = await this.$http.post(`/project/${this.id}/build`)
 				console.log(data)
 			} catch (error) {
 				console.log(error, 'build err')
 			}
 		},
-		async getLog(stepName = 'build') {
+		async getLog() {
 			try {
-				const { data } = await this.$http.get(`/project/${this.id}/deployment/${stepName}/logs`)
+				const { data } = await this.$http.get(`/project/${this.id}/deployment/logs`)
 				console.log(data)
 			} catch (error) {
 				console.log(error, 'step log')

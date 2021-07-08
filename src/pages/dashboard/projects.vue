@@ -94,7 +94,7 @@ export default {
 				this.loading = true
 				const { data } = await this.$http.get('/project')
 				this.list = data
-				console.log(data)
+				// console.log(data)
 			} catch (error) {
 				// 
 			}

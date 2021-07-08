@@ -3,37 +3,48 @@
 	<v-card outlined>
 		<e-card-head-1 title="Deployments">
 			<div>
-				A list of deployments in <span class="white-0">nuxtjs</span>
+				A list of deployments in <span class="white-0">{{ info.framework }}</span>
 			</div>
 		</e-card-head-1>
 		
 		<div class="pd-20">
 			<div class="bd-1 bdrs-5">
-				<div v-ripple class="bdb-1 pd-20" :class="{
+				<v-skeleton-loader v-if="!list" type="article" />
+
+				<div class="ta-c pd-20 gray fz-14" v-else-if="!list.length">
+					empty
+				</div>
+
+				<div class="bdb-1 pd-20" :class="{
 					'bdb-1': i < 3,
-					'd-flex al-c flex-wrap': !$vuetify.breakpoint.smAndDown,
+					'd-flex al-c flex-wrap': !asMobile,
 				}"
-					v-for="i in 3" :key="i">
+					v-for="(it, i) in list" :key="i">
 					<div class="d-flex" 
-						:style="$vuetify.breakpoint.smAndDown ? 'margin-bottom: 10px;' : 'width: 300px; margin-right: 30px;'">
+						:style="asMobile ? 'margin-bottom: 10px;' : 'width: 300px; margin-right: 30px;'">
 						<div class="flex-1">
-							<div>demo app {{$vuetify.breakpoint.smAndDown }}</div>
-							<div class="gray mt-1 fz-13">Production(Current)</div>
+							<div>{{ it.buildConfig.name }}</div>
+							<div class="gray mt-1 fz-13">
+								Production
+								<!-- (Current) -->
+							</div>
 						</div>
 						<div class="ml-5">
 							<div class="gray">Ready</div>
-							<div class="mt-1 fz-13">54S</div>
+							<div class="mt-1 fz-13">1s</div>
 						</div>
 					</div>
 					<div class="d-flex al-c flex-1">
 						<div class="flex-1 mr-5">
-							<div>Initial commit Created from https://xxx</div>
+							<div>commit comment</div>
 							<div class="fz-14 mt-1">
 								<v-icon size="14">mdi-source-branch</v-icon>
-								<span>master</span>
+								<span>{{ it.buildConfig.currentBranch }}</span>
 							</div>
 						</div>
-						<span class="fl-r gray fz-13" v-show="!$vuetify.breakpoint.smAndDown">1h ago by hqs</span>
+						<span class="fl-r gray fz-13" v-show="!asMobile">
+							{{ new Date(it.createAt).toNiceTime(nowDate) }} by {{ userInfo.username }}
+						</span>
 						<v-menu>
 							<template v-slot:activator="{ attrs, on }">
 								<v-btn icon
@@ -44,7 +55,7 @@
 							</template>
 							<v-list>
 								<v-list-item link
-									v-for="(item, i) in list" :key="i">
+									v-for="(item, i) in optList" :key="i">
 									<v-list-item-title>
 										<v-icon size="16">mdi-{{item.icon}}</v-icon>
 										<span class="fz-15 ml-2">{{item.text}}</span>
@@ -62,10 +73,24 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
+
 export default {
+	computed: {
+		...mapState({
+			info: s => s.projectInfo,
+			userInfo: s => s.userInfo,
+			nowDate: s => s.nowDate,
+		}),
+		asMobile() {
+			return this.$vuetify.breakpoint.smAndDown
+		},
+	},
 	data() {
+		const { id } = this.$route.params
 		return {
-			list: [
+			id,
+			optList: [
 				{
 					text: 'Redeploy',
 					icon: 'send',
@@ -82,7 +107,22 @@ export default {
 					text: 'Copy URL',
 					icon: 'link-variant',
 				},
-			]
+			],
+			list: null,
+		}
+	},
+	mounted() {
+		this.getList()
+	},
+	methods: {
+		async getList() {
+			try {
+				const { data } = await this.$http.get('/project/task/' + this.id)
+				this.list = data
+			} catch (error) {
+				console.log(error)
+			}
+
 		}
 	}
 }
