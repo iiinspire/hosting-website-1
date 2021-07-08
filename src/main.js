@@ -2,6 +2,7 @@ import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
 import store from './store'
+import { mapState } from 'vuex'
 import vuetify from './plugins/vuetify'
 import './css/style.scss'
 import './components'
@@ -21,6 +22,11 @@ new Vue({
 	store,
 	vuetify,
 	render: h => h(App),
+	computed: {
+		...mapState({
+			token: s => s.token,
+		}),
+	},
 	mounted() {
 		this.onInit()
 	},
@@ -30,14 +36,15 @@ new Vue({
 		},
 		token(val) {
 			if(val) {
-				this.getUesrInfo()
+				this.onInit()
 			}
 		},
 	},
 	methods: {
 		async onInit() {
 			const now = Date.now()
-			if(localStorage.token) {
+			if(this.token) {
+				this.initSocket()
 				this.getUesrInfo()
 				try {
 					if(now - localStorage.refreshAt > 2*3600e3) {
@@ -48,6 +55,28 @@ new Vue({
 					console.log(error.response)
 				}
 			}
+		},
+		initSocket() {
+			this.socket = window.io('ws.foreverland.xyz', {
+				path: '/socket.io',
+				query: 'token=' + this.token,
+				withCredentials: false,
+			})
+			this.socket.on('error', (err) => {
+				console.log('socket error', err, this.socket)
+				this.isSocketOn = false
+				// this.initSocket() // socket.io auto reconnect
+			})
+			this.socket.on('connect', () => {
+				console.log('socket connect')
+				this.isSocketOn = true
+			})
+			this.socket.on('PROJECT_BUILD', ({name, data}) => {
+				if(name == 'log') {
+					data.content = atob(data.content)
+				}
+				console.log(name, data)
+			})
 		},
 		async getUesrInfo() {
 			const { data } = await this.$http.get('/user')
