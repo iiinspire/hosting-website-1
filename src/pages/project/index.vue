@@ -26,7 +26,7 @@ import { mapState } from 'vuex'
 export default {
 	computed: {
 		...mapState({
-			projectMap: s => s.projectMap,
+			info: s => s.projectInfo,
 			noticeMsg: s => s.noticeMsg,
 		}),
 	},
@@ -62,23 +62,16 @@ export default {
 	methods: {
 		async getInfo() {
 			try {
-				this.$loading()
-				const res = await this.$http.get('/project/' + this.id)
-				const { repo={}, lastBuild={} } = res.data
-				repo.pathPre = `${repo.namespace}/${repo.name}`
-				const { data } = await this.$http.get('/project/config/' + this.id)
-				data.repo = repo
-				data.lastBuild = lastBuild
-				this.$loading.close()
-				this.info = data
-				this.$setState({
-					projectInfo: data,
-				})
+				if(this.info.id != this.id) this.$loading()
+				await this.$store.dispatch('getProjectInfo', this.id)
 			} catch (error) {
-				this.$alert(error.message).then(() => {
+				this.$confirm(error.message, '', {
+					confirmText: 'Retry',
+				}).then(() => {
 					this.getInfo()
 				})
 			}
+			this.$loading.close()
 		},
 	},
 }

@@ -65,7 +65,9 @@ new Vue({
 			this.socket.on('PROJECT_BUILD', ({name, data}) => {
 				if(name == 'log') {
 					// data.content = atob(data.content)
-					// data.state = 
+					data.state = 'LOG'
+				} else {
+					data.state = name.replace('build_', '').toUpperCase()
 				}
 				this.$setState({
 					buildInfo: {

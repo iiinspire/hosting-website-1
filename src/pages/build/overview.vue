@@ -15,19 +15,18 @@
 			<v-row class="pos-r">
 				<v-col cols="12" md="4">
 					<div class="bd-1 bdrs-5 pd-20">
-						<h2>Build Failed</h2>
+						<h2>Building</h2>
 						<div class="fz-12 gray mt-2 mb-5">
-							<p>Local:   http://localhost:8080/</p>
-							<p>DONE  Compiled successfully in 324ms</p>
-							<p>DONE  Compiled successfully in 324ms</p>
+							<p>todo</p>
 						</div>
 						<v-btn outlined block color="#888" @click="scrollToLog">View Logs</v-btn>
 					</div>
 
 					<div class="mt-5">
 						<div class="d-flex">
-							<v-btn color="error" class="flex-1" :loading="deploying"
-								>
+							<v-btn color="error" class="flex-1" v-if="['SUCCESS', 'FAIL'].indexOf(state) == -1"
+								:loading="deploying"
+								@click="onDeploy">
 								Redeploy
 							</v-btn>
 							<v-btn color="primary" class="ml-5 flex-1">Visit</v-btn>
@@ -64,8 +63,14 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
+
 export default {
 	computed: {
+		...mapState({
+			projInfo: s => s.projectInfo,
+			buildInfo: s => s.buildInfo,
+		}),
 		asMobile() {
 			return this.$vuetify.breakpoint.smAndDown
 		},
@@ -80,17 +85,37 @@ export default {
 		return {
 			logs: [],
 			deploying: false,
+			state: null,
 		}
 	},
 	watch: {
 		taskId() {
 			this.getLog()
+			this.getProjectInfo()
+		},
+		buildInfo({ data }) {
+			if(data.taskId == this.taskId) {
+				// console.log(name)
+			}
+			this.state = data.state
+			const last = this.logs[this.logs.length - 1]
+			if(last != data.content) {
+				this.logs.push(data.content)
+				this.goLogEnd()
+			}
 		},
 	},
 	mounted() {
 		this.getLog()
+		if(this.projInfo.id != this.projId) {
+			this.getProjectInfo()
+		}
 	},
 	methods: {
+		async getProjectInfo() {
+			const data = await this.$store.dispatch('getProjectInfo', this.projId)
+			this.state = data.lastBuild.state
+		},
 		onCopied() {
 			this.$notice('copied')
 		},
@@ -129,12 +154,12 @@ export default {
 		goLogEnd() {
 			this.$nextTick(() => {
 				const el = this.$refs.con
-				el.scrollTo(0, el.scrollHeight)
+				if(el) el.scrollTo(0, el.scrollHeight)
 			})
 		},
 		scrollToLog() {
 			const el = this.$refs.con
-			window.scrollTo(0, el.offsetTop)
+			if(el) window.scrollTo(0, el.offsetTop)
 			this.goLogEnd()
 		},
 	}

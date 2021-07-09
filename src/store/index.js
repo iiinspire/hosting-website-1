@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import api from '../api'
 
 Vue.use(Vuex)
 
@@ -29,6 +30,21 @@ const store = new Vuex.Store({
 			}
 		},
 	},
+	actions: {
+		async getProjectInfo(_, id) {
+			const res = await api.get('/project/' + id)
+			const { repo={}, lastBuild={} } = res.data
+			repo.pathPre = `${repo.namespace}/${repo.name}`
+			const { data } = await api.get('/project/config/' + id)
+			data.repo = repo
+			data.lastBuild = lastBuild
+			data.id = id
+			setState({
+				projectInfo: data,
+			})
+			return data
+		},
+	}
 })
 
 export const setState = Vue.prototype.$setState = data => {

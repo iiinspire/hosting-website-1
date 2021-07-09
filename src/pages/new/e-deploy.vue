@@ -231,9 +231,10 @@ export default {
 			try {
 				this.creating = true
 				const { data } = await this.$http.post('/project', body)
-				this.$alert('Project id:' + data.projectId).then(() => {
-					console.log(data)
-				})
+				const projId = data.projectId
+				const { data: {taskId} } = await this.$http.post(`/project/${projId}/build`)
+				await this.$alert('Project created successfully')
+				this.$router.replace(`/build/${projId}/${taskId}/overview`)
 			} catch (error) {
 				// 
 			}
