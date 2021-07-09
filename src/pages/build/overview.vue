@@ -24,7 +24,7 @@
 
 					<div class="mt-5">
 						<div class="d-flex">
-							<v-btn color="error" class="flex-1" v-if="['SUCCESS', 'FAIL'].indexOf(state) == -1"
+							<v-btn color="error" class="flex-1" v-if="['SUCCESS', 'FAIL'].indexOf(state) > -1"
 								:loading="deploying"
 								@click="onDeploy">
 								Redeploy
