@@ -717,7 +717,7 @@
 }, {
 	"name": "Other",
 	"slug": null,
-	"logo": "https://res.cloudinary.com/zeit-inc/image/fetch/https://raw.githubusercontent.com/vercel/vercel/main/packages/frameworks/logos/other.svg",
+	"logo": "img/github.png",
 	"description": "No framework or a unoptimized framework.",
 	"settings": {
 		"installCommand": {

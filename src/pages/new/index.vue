@@ -32,8 +32,12 @@
 							<div v-for="(it, i) in list" :key="i">
 								<div class="pd-20 d-flex al-c">
 									<!-- <v-icon class="mr-5">mdi-wallet</v-icon> -->
+									<img :src="it.fwImg" style="width: 25px" class="mr-2">
 									<span class="fz-17 line-1">{{ it.name }}</span>
-									<span class="ml-3 mr-3 gray fz-13 shrink-0">
+									<v-icon color="#999" size="16" class="ml-1" :class="{
+										'op-0': !it.private,
+									}">mdi-lock-outline</v-icon>
+									<span class="ml-2 mr-3 gray fz-13 shrink-0">
 										{{ new Date(it.updateAt).toNiceTime(nowDate) }}
 									</span>
 									<v-btn class="ml-auto" color="primary" small @click="onImport(it)">Import</v-btn>
@@ -132,7 +136,10 @@ export default {
 		async getList() {
 			try {
 				const { data } = await this.$http.get('/repo/list')
-				this.list = data
+				this.list = data.map(it => {
+					it.fwImg = this.$getFramework(it.frameworkAdvice).logo
+					return it
+				})
 			} catch (error) {
 				// 
 			}
