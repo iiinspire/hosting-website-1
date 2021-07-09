@@ -64,10 +64,11 @@ export default {
 			try {
 				this.$loading()
 				const res = await this.$http.get('/project/' + this.id)
-				const { repo={} } = res.data
+				const { repo={}, lastBuild={} } = res.data
 				repo.pathPre = `${repo.namespace}/${repo.name}`
 				const { data } = await this.$http.get('/project/config/' + this.id)
 				data.repo = repo
+				data.lastBuild = lastBuild
 				this.$loading.close()
 				this.info = data
 				this.$setState({

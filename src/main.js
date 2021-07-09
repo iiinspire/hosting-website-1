@@ -7,6 +7,9 @@ import vuetify from './plugins/vuetify'
 import './css/style.scss'
 import './components'
 import './api'
+import VueClipboards from 'vue-clipboards'
+
+Vue.use(VueClipboards)
 
 Vue.prototype.$openWindow = (url) => {
 	if(store.state.isTouch) location.href = url

@@ -32,7 +32,7 @@ export default [
 		children: ProjectChildren,
 	},
 	{
-		path: '/build/:id',
+		path: '/build/:projId/:taskId',
 		component: Build,
 		children: BuildChildren,
 	},

@@ -145,6 +145,7 @@ export default {
 			})
 		}
 		Vue.prototype.$notice = (content, attrs={}, opts={}) => {
+			this.showSnackbar = false
 			this.noticeInfo = {
 				type: 'snackbar',
 				content,

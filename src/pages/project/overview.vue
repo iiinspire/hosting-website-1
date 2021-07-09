@@ -23,8 +23,14 @@
 				<div class="d-flex al-c" :class="{
 					'mt-4': $vuetify.breakpoint.mobile,
 				}">
-					<v-btn small class="mr-5">View Build Logs</v-btn>
-					<v-btn small>View Domains</v-btn>
+					<v-btn small class="mr-5" 
+						@click="onView('log')">
+						View Build Logs
+					</v-btn>
+					<v-btn small 
+						@click="onView('domain')">
+						View Domains
+					</v-btn>
 				</div>
 			</div>
 		</div>
@@ -35,8 +41,9 @@
 <script>
 export default {
 	data() {
+		const { id } = this.$route.params
 		return {
-
+			id,
 		}
 	},
 	computed: {
@@ -47,5 +54,18 @@ export default {
 			return this.$store.state.projectInfo
 		},
 	},
+	methods: {
+		onView(name) {
+			const { lastBuild } = this.info
+			let link
+			if(name == 'log') {
+				link = `/build/${this.id}/${lastBuild.taskId}/overview`
+			} 
+			else if(name == 'domain') {
+				link = `/project/${this.id}/settings?tab=1`
+			}
+			this.$router.push(link)
+		},
+	}
 }
 </script>

@@ -20,6 +20,7 @@ const store = new Vuex.Store({
 		noticeMsg: {},
 		alertInfo: {},
 		projectInfo: {},
+		buildInfo: {},
 	},
 	mutations: {
 		[SET_DATA](state, data) {

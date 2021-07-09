@@ -55,10 +55,11 @@
 							</template>
 							<v-list>
 								<v-list-item link
-									v-for="(item, i) in optList" :key="i">
+									@click="onOpt(opt, it)"
+									v-for="(opt, i) in optList" :key="i">
 									<v-list-item-title>
-										<v-icon size="16">mdi-{{item.icon}}</v-icon>
-										<span class="fz-15 ml-2">{{item.text}}</span>
+										<v-icon size="16">mdi-{{opt.icon}}</v-icon>
+										<span class="fz-15 ml-2">{{opt.text}}</span>
 									</v-list-item-title>
 								</v-list-item>
 							</v-list>
@@ -93,18 +94,22 @@ export default {
 			optList: [
 				{
 					text: 'Redeploy',
+					name: 'deploy',
 					icon: 'send',
 				},
 				{
 					text: 'Inspect Deployment',
+					link: '/build/{projId}/{taskId}/overview',
 					icon: 'card-search-outline',
 				},
 				{
 					text: 'View Source',
+					link: '/build/{projId}/{taskId}/source',
 					icon: 'xml',
 				},
 				{
 					text: 'Copy URL',
+					name: 'copy',
 					icon: 'link-variant',
 				},
 			],
@@ -115,6 +120,14 @@ export default {
 		this.getList()
 	},
 	methods: {
+		onOpt(opt, it) {
+			let { name, link } = opt
+			if(link) {
+				link = link.replace('{taskId}', it.taskId).replace('{projId}', it.projectId)
+				this.$router.push(link)
+			}
+			else console.log(name)
+		},
 		async getList() {
 			try {
 				const { data } = await this.$http.get('/project/task/' + this.id)
