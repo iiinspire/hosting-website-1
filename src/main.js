@@ -4,21 +4,9 @@ import router from './router'
 import store from './store'
 import { mapState } from 'vuex'
 import vuetify from './plugins/vuetify'
-import './css/style.scss'
-import './components'
-import './api'
-import VueClipboards from 'vue-clipboards'
-
-Vue.use(VueClipboards)
-
-Vue.prototype.$openWindow = (url) => {
-	if(store.state.isTouch) location.href = url
-	else window.open(url, 'n1', 'height=600,width=900,top=50,left=200,toolbar=no,menubar=no') 
-}
+import './setup'
 
 Vue.config.productionTip = false
-
-Vue.prototype.$color1 = '#4A96FA'
 
 new Vue({
 	router,
@@ -76,8 +64,15 @@ new Vue({
 			})
 			this.socket.on('PROJECT_BUILD', ({name, data}) => {
 				if(name == 'log') {
-					data.content = atob(data.content)
+					// data.content = atob(data.content)
+					// data.state = 
 				}
+				this.$setState({
+					buildInfo: {
+						name,
+						data,
+					},
+				})
 				console.log(name, data)
 			})
 		},
