@@ -35,8 +35,8 @@
 						</div>
 					</div>
 					<div class="d-flex al-c flex-1">
-						<div class="flex-1 mr-5">
-							<div>commit comment</div>
+						<div class="flex-1 mr-5" v-if="it.commits">
+							<div>{{ it.commits.message }}</div>
 							<div class="fz-14 mt-1">
 								<v-icon size="14">mdi-source-branch</v-icon>
 								<span>{{ it.buildConfig.currentBranch }}</span>
