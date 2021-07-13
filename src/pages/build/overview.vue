@@ -14,7 +14,7 @@
 		width: 150px;
 		top: 0;
 		right: 0;
-		padding: 20px;
+		padding: 15px;
 		button {
 			width: 100%;
 			margin-bottom: 20px;
@@ -25,21 +25,14 @@
 <template>
 <div>
 	<v-card outlined>
-		<div class="pd-20" v-if="!logs.length">
-			<v-skeleton-loader type="card" />
-		</div>
-		<div class="pd-20" v-else>
+		<div class="pd-20">
 			<v-row class="pos-r">
 				<v-col cols="12" md="4">
-					<div class="bd-1 bdrs-5 pd-20">
-						<h2>Build {{ state.capitalize() }}</h2>
-						<div class="fz-12 gray mt-2 mb-5" style="min-height: 80px;">
-							<p>xx</p>
-						</div>
-						<v-btn outlined block color="#888" @click="scrollToLog">View Logs</v-btn>
+					<div class="bd-1 bdrs-5">
+						<v-img src="img/proj-bg-def.png" height="220px"></v-img>
 					</div>
 
-					<div class="mt-5">
+					<div class="mt-5" v-if="logs.length">
 						<div class="d-flex build-btn-wrap">
 							<!-- :disabled="isRunning" -->
 							<v-btn color="error" class="flex-1 mr-5" 
@@ -52,7 +45,10 @@
 					</div>
 				</v-col>
 				<v-col cols="12" md="6">
-					<template>
+					<div class="pd-20" v-if="!logs.length">
+						<v-skeleton-loader type="article" />
+					</div>
+					<div class="fz-14" v-else>
 						<div class="d-flex">
 							<div class="flex-1">
 								<div class="label-1">Status</div>
@@ -93,7 +89,7 @@
 								{{ projInfo.repo.defaultBranch }}
 							</span>
 						</div>
-					</template>
+					</div>
 				</v-col>
 			</v-row>
 
@@ -108,7 +104,10 @@
 				</v-btn>
 			</div>
 			
-			<div class="bd-1 bdrs-5 bg-f5 mt-5 fz-13 gray-6 ov-a" ref="con"
+			<div class="pd-20" v-if="!logs.length">
+				<v-skeleton-loader type="card" />
+			</div>
+			<div v-else class="bd-1 bdrs-5 bg-f5 mt-5 fz-13 gray-6 ov-a" ref="con"
 				style="max-height: 72vh;">
 				<div class="mt-5 mb-5 logs-wrap">
 					<div v-for="(it, i) in logs" :key="i">
