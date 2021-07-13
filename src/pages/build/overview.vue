@@ -11,7 +11,10 @@
 <template>
 <div>
 	<v-card outlined>
-		<div class="pd-20">
+		<div class="pd-20" v-if="!logs.length">
+			<v-skeleton-loader type="card" />
+		</div>
+		<div class="pd-20" v-else>
 			<v-row class="pos-r">
 				<v-col cols="12" md="4">
 					<div class="bd-1 bdrs-5 pd-20">
@@ -48,9 +51,9 @@
 					<span class="fz-13">Copy to Clipboard</span>
 				</v-btn>
 			</div>
-			<v-skeleton-loader v-if="!logs.length" type="article" />
-			<div class="bd-1 bdrs-5 bg-f5 mt-5 fz-13 gray-6 ov-a" v-else ref="con"
-				style="max-height: 70vh;">
+			
+			<div class="bd-1 bdrs-5 bg-f5 mt-5 fz-13 gray-6 ov-a" ref="con"
+				style="max-height: 72vh;">
 				<div class="mt-5 mb-5 logs-wrap">
 					<div v-for="(it, i) in logs" :key="i">
 						{{ it }}

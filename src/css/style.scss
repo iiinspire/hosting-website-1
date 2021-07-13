@@ -97,3 +97,21 @@ $bdcolor: #E6E8EB;
 	height: 110px;
 	background: linear-gradient(135deg, #0d217d, #071156 70%, #080d3a);
 }
+.label-1 {
+	margin-bottom: 8px;
+	color: #9AA5B4;
+}
+.dot-1 {
+	display: inline-block;
+	vertical-align: middle;
+	margin-right: 3px;
+	padding: 3px;
+	border-radius: 100px;
+	background: #4A96FA;
+	&.success {
+		color: #69C07E;
+	}
+	&.fail, &.error {
+		color: #E43D3D;
+	}
+}

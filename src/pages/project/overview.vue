@@ -4,10 +4,10 @@
 <template>
 <div>
 	<v-card outlined>
-		<e-card-head-1 :title="info.name || '*'">
+		<e-card-head-1 :title="info.name || '--'">
 			<div class="">
 				<v-icon color="#fff" size="16">mdi-github</v-icon>
-				<span class="ml-1">{{ info.repo ? info.repo.pathPre : '*' }}</span>
+				<span class="ml-1">{{ info.repo ? info.repo.pathPre : '--' }}</span>
 			</div>
 			<template #right>
 				<v-btn small depressed color="primary">Visit</v-btn>
@@ -33,12 +33,63 @@
 					</v-btn>
 				</div>
 			</div>
+
+			<div class="bd-1 pd-20 mt-5">
+				<v-row>
+					<v-col cols="12" md="6">
+						<v-img src="img/proj-bg-def.png" height="300"></v-img>
+					</v-col>
+					<v-col cols="12" md="6">
+						<template v-if="info.id">
+							<div class="label-1">
+								Deployment
+							</div>
+							<div>{{ domain }}</div>
+
+							<div class="label-1 mt-6">
+								Domains
+							</div>
+							<div>{{ domain }}</div>
+
+							<div class="d-flex mt-6">
+								<div class="flex-1">
+									<div class="label-1">State</div>
+									<div class="color-suc">
+										<span class="dot-1" :class="state.toLowerCase()"></span>
+										{{ state }}
+									</div>
+								</div>
+								<div class="flex-1">
+									<div class="label-1">Created</div>
+									<div>
+										<!-- {{ new Date() }} -->
+									</div>
+								</div>
+							</div>
+
+							<div class="label-1 mt-6">
+								Branch
+							</div>
+							<div class="d-flex al-c">
+								<v-icon size="18">mdi-github</v-icon>
+								<span class="ml-2">
+									{{ info.repo.defaultBranch }}
+								</span>
+							</div>
+						</template>
+						<v-skeleton-loader v-else type="article" />
+					</v-col>
+				</v-row>
+			</div>
 		</div>
+
 	</v-card>
 </div>
 </template>
 
 <script>
+import { mapState } from 'vuex'
+
 export default {
 	data() {
 		const { id } = this.$route.params
@@ -47,11 +98,16 @@ export default {
 		}
 	},
 	computed: {
-		userInfo() {
-			return this.$store.state.userInfo
+		...mapState({
+			userInfo: s => s.userInfo,
+			info: s => s.projectInfo,
+			nowDate: s => s.nowDate,
+		}),
+		domain() {
+			return `${this.info.name}.4everland.app`
 		},
-		info() {
-			return this.$store.state.projectInfo
+		state() {
+			return this.info.lastBuild.state
 		},
 	},
 	methods: {

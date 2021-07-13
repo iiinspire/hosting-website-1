@@ -1,6 +1,6 @@
 <template>
 <div class="d-flex al-c mt-3 fz-14" v-if="info && info.taskId">
-	<span class="circle"></span>
+	<span class="dot-1 mr-1" :class="info.state.toLowerCase()"></span>
 	<span class="line-1 shrink-1">
 		{{ domain }}
 	</span>
@@ -29,7 +29,7 @@ export default {
 			if(this.type == 'Latest') {
 				mid = '-' + this.info.taskId
 			}
-			return `${this.name}${mid}.4everland.com`
+			return `${this.name}${mid}.4everland.app`
 		},
 	},
 }
