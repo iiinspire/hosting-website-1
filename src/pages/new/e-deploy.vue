@@ -18,7 +18,7 @@
 			<span class="ml-2">{{ importItem.defaultBranch }}</span>
 		</div>
 	</v-card-text>
-	<div class="pd-20" :class="{
+	<div class="pd-20 ov-a" style="max-height: 60vh;" :class="{
 		'bdt-1': curStep > 0,
 	}">
 		<v-window v-model="curStep">

@@ -7,6 +7,20 @@
 		}
 	}
 }
+@media screen and (min-width: 960px) {
+	.v-application .build-btn-wrap {
+		position: absolute;
+		display: block!important;
+		width: 150px;
+		top: 0;
+		right: 0;
+		padding: 20px;
+		button {
+			width: 100%;
+			margin-bottom: 20px;
+		}
+	}
+}
 </style>
 <template>
 <div>
@@ -18,16 +32,17 @@
 			<v-row class="pos-r">
 				<v-col cols="12" md="4">
 					<div class="bd-1 bdrs-5 pd-20">
-						<h2>Building</h2>
-						<div class="fz-12 gray mt-2 mb-5">
-							<p>todo</p>
+						<h2>Build {{ state.capitalize() }}</h2>
+						<div class="fz-12 gray mt-2 mb-5" style="min-height: 80px;">
+							<p>xx</p>
 						</div>
 						<v-btn outlined block color="#888" @click="scrollToLog">View Logs</v-btn>
 					</div>
 
 					<div class="mt-5">
-						<div class="d-flex">
-							<v-btn color="error" class="flex-1 mr-5" v-if="['SUCCESS', 'FAIL'].indexOf(state) > -1"
+						<div class="d-flex build-btn-wrap">
+							<!-- :disabled="isRunning" -->
+							<v-btn color="error" class="flex-1 mr-5" 
 								:loading="deploying"
 								@click="onDeploy">
 								Redeploy
@@ -36,14 +51,55 @@
 						</div>
 					</div>
 				</v-col>
-				<v-col cols="12" md="8">
+				<v-col cols="12" md="6">
+					<template>
+						<div class="d-flex">
+							<div class="flex-1">
+								<div class="label-1">Status</div>
+								<div>
+									<span class="dot-1" :class="'c-'+state"></span>
+									<span class="color-1" :class="'c-'+state">{{ state.capitalize() }}</span>
+								</div>
+							</div>
+							<div class="flex-1">
+								<div class="label-1">Environment</div>
+								<div>Production</div>
+							</div>
+							<div class="flex-1">
+								<div class="label-1">Duration</div>
+								<div>
+									{{ new Date(projInfo.lastBuild.createAt).toNiceTime(nowDate) }}
+								</div>
+							</div>
+							<div class="flex-1">
+								<div class="label-1">Age</div>
+								<div>
+									{{ new Date(projInfo.lastBuild.createAt).toNiceTime(nowDate) }}
+								</div>
+							</div>
+						</div>
 
+						<div class="label-1 mt-6">Domains</div>
+						<div>
+							{{ projInfo.name }}.4verland.app
+						</div>
+
+						<div class="label-1 mt-6">
+							Branch
+						</div>
+						<div class="d-flex al-c">
+							<v-icon size="18">mdi-github</v-icon>
+							<span class="ml-2" v-if="projInfo.repo">
+								{{ projInfo.repo.defaultBranch }}
+							</span>
+						</div>
+					</template>
 				</v-col>
 			</v-row>
 
 			<v-divider class="mt-5 mb-5"></v-divider>
 			<div class="d-flex al-c">
-				<span>Build Logs</span>
+				<span class="fz-20">Build Logs</span>
 				<v-btn class="ml-auto" outlined color="#888"
 					v-if="logs.length"
 					v-clipboard="logs.join('\n')" @success="onCopied">
@@ -73,6 +129,7 @@ export default {
 		...mapState({
 			projInfo: s => s.projectInfo,
 			buildInfo: s => s.buildInfo,
+			nowDate: s => s.nowDate,
 		}),
 		asMobile() {
 			return this.$vuetify.breakpoint.smAndDown
@@ -83,12 +140,15 @@ export default {
 		taskId() {
 			return this.$route.params.taskId
 		},
+		isRunning() {
+			return this.state == 'running'
+		},
 	},
 	data() {
 		return {
 			logs: [],
 			deploying: false,
-			state: null,
+			state: '',
 		}
 	},
 	watch: {
@@ -99,7 +159,7 @@ export default {
 		buildInfo({ name, data }) {
 			if(data.taskId == this.taskId) {
 				console.log(this.taskId, name)
-				this.state = data.state
+				this.state = data.state.toLowerCase()
 				const last = this.logs[this.logs.length - 1]
 				if(name == 'log' && last != data.content) {
 					this.logs.push(data.content)
@@ -110,14 +170,14 @@ export default {
 	},
 	mounted() {
 		this.getLog()
-		if(this.projInfo.id != this.projId) {
-			this.getProjectInfo()
-		}
+		this.getProjectInfo()
 	},
 	methods: {
 		async getProjectInfo() {
-			const data = await this.$store.dispatch('getProjectInfo', this.projId)
-			this.state = data.lastBuild.state
+			if(this.projInfo.id != this.projId) {
+				await this.$store.dispatch('getProjectInfo', this.projId)
+			}
+			this.state = this.projInfo.lastBuild.state.toLowerCase()
 		},
 		onCopied() {
 			this.$notice('copied')

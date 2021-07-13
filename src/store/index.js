@@ -36,10 +36,13 @@ const store = new Vuex.Store({
 			const { repo={} } = data
 			repo.pathPre = `${repo.namespace}/${repo.name}`
 			data.repo = repo
-			if(!data.config) {
-				const { data: config } = await api.get('/project/config/' + id)
-				data.config = config
-			}
+			const { name } = data.config = data.buildConfig
+			data.name = name
+			delete data.buildConfig
+			// if(!data.config) {
+			// 	const { data: config } = await api.get('/project/config/' + id)
+			// 	data.config = config
+			// }
 			data.id = id
 			setState({
 				projectInfo: data,
