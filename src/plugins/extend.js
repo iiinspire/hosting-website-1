@@ -57,7 +57,7 @@ String.prototype.toNiceTime = function(now, mode=1) {
 	const date = this.toString().toDate()
 	return date.toNiceTime(now, mode)
 }
-Date.prototype.toNiceTime = function(now, mode = 1) {
+Date.prototype.toNiceTime = function(now, mode = 11) {
 	const date = this
 	// console.log(now, date)
 	const second = (now - date) / 1e3 | 0
@@ -67,7 +67,7 @@ Date.prototype.toNiceTime = function(now, mode = 1) {
 		if (second < 60 * 60) return Math.floor(second / 60) + 'min ago'
 		if (mode == 11) {
 			if (second < 86400) return Math.floor(second / 3600) + 'h ago'
-			return Math.floor(second / 86400) + 'd age'
+			return Math.floor(second / 86400) + 'd ago'
 		}
 	}
 	let datePart = date.format('yy-mm-dd')

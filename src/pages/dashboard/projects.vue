@@ -36,9 +36,9 @@
 					</div>
 				</v-card-title>
 				<v-card-subtitle>
-					<div>
-						{{ it.namespace }}
-						<span class="ml-3 gray">2d ago</span>
+					<div class="mt-5" style="min-height: 60px">
+						<e-build-line type="Production" :name="it.name" :info="it.production"></e-build-line>
+						<e-build-line type="Latest" :name="it.name" :info="it.latest"></e-build-line>
 					</div>
 				</v-card-subtitle>
 
