@@ -102,7 +102,7 @@ export default {
 		info: Object,
 	},
 	data() {
-		const { currentBranch } = this.info
+		const { currentBranch } = this.info.config
 		return {
 			savingConnect: false,
 			currentBranch,
@@ -165,7 +165,7 @@ export default {
 		},
 		async setConnect(repoId) {
 			try {
-				const { projectId: id } = this.info
+				const { id } = this.info
 				let url = '/project/repo/' + id
 				let method = 'delete'
 				if(repoId) {
@@ -185,7 +185,7 @@ export default {
 		async getBranch() {
 			if(!this.repoName) return
 			try {
-				const { data } = await this.$http.get(`/project/branch/${this.info.projectId}`)
+				const { data } = await this.$http.get(`/project/branch/${this.info.id}`)
 				// console.log(data)
 				this.branches = [data.current, ...(data.other || [])]
 			} catch (error) {
@@ -195,7 +195,7 @@ export default {
 		async setBranch() {
 			try {
 				this.savingBranch = true
-				await this.$http.put('/project/branch/git/' + this.info.projectId, {
+				await this.$http.put('/project/branch/git/' + this.info.id, {
 					name: this.currentBranch,
 				})
 				this.onUpdted()

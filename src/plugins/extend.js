@@ -64,7 +64,7 @@ Date.prototype.toNiceTime = function(now, mode = 11) {
 	if ((mode == 1 || mode == 11) && second > 0) {
 		if (second < 10) return 'just now'
 		if (second < 60) return (second - second % 10) + 's ago'
-		if (second < 60 * 60) return Math.floor(second / 60) + 'min ago'
+		if (second < 60 * 60) return Math.floor(second / 60) + 'm ago'
 		if (mode == 11) {
 			if (second < 86400) return Math.floor(second / 3600) + 'h ago'
 			return Math.floor(second / 86400) + 'd ago'

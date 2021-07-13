@@ -108,7 +108,7 @@ export default {
 		},
 	},
 	data() {
-		const { name, rootDirectory } = this.info
+		const { name } = this.info
 		const form = {
 			framework: '',
 			outputDirectory: '',
@@ -117,12 +117,12 @@ export default {
 		}
 		const overForm = {}
 		for(const key in form) {
-			const val = form[key] = this.info[key] || ''
+			const val = form[key] = this.info.config[key] || ''
 			overForm[key] = !!val
 		}
 		return {
 			name,
-			rootDirectory,
+			rootDirectory: this.info.config.rootDirectory,
 			form,
 			overForm,
 			frameworks,
@@ -142,15 +142,11 @@ export default {
 		onSwith(key) {
 			const isOver = this.overForm[key]
 			// console.log(key)
-			this.form[key] = isOver ? (this.info[key] || '') : ''
+			this.form[key] = isOver ? (this.info.config[key] || '') : ''
 		},
 		async saveProject(body) {
-			await this.$http.put('/project/config/' + this.info.projectId, body)
+			await this.$http.put('/project/config/' + this.info.id, body)
 			this.$setState({
-				projectInfo: {
-					...this.info,
-					...body,
-				},
 				noticeMsg: {
 					name: 'updateProject',
 				},

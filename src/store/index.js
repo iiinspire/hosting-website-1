@@ -32,12 +32,14 @@ const store = new Vuex.Store({
 	},
 	actions: {
 		async getProjectInfo(_, id) {
-			const res = await api.get('/project/' + id)
-			const { repo={}, lastBuild={} } = res.data
+			const { data } = await api.get('/project/' + id)
+			const { repo={} } = data
 			repo.pathPre = `${repo.namespace}/${repo.name}`
-			const { data } = await api.get('/project/config/' + id)
 			data.repo = repo
-			data.lastBuild = lastBuild
+			if(!data.config) {
+				const { data: config } = await api.get('/project/config/' + id)
+				data.config = config
+			}
 			data.id = id
 			setState({
 				projectInfo: data,

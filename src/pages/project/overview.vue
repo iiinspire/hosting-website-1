@@ -62,7 +62,7 @@
 								<div class="flex-1">
 									<div class="label-1">Created</div>
 									<div>
-										<!-- {{ new Date() }} -->
+										{{ new Date(info.repo.updateAt).toNiceTime(nowDate) }}
 									</div>
 								</div>
 							</div>

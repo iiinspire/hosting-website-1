@@ -47,7 +47,7 @@ export default {
 		info: Object,
 	},
 	data() {
-		const { directoryList } = this.info
+		const { directoryList } = this.info.config
 		return {
 			directoryList,
 			isStatis: false,
@@ -79,7 +79,7 @@ export default {
 				const { username } = this.userInfo
 				await this.$prompt(html, 'Delete Project', {
 					inputAttrs: {
-						label: `Enter your name ${username} to continue`,
+						label: `Enter your name \`${username}\` to continue`,
 						rules: [
 							v => v == username || 'incorrect',
 						],
@@ -87,16 +87,17 @@ export default {
 					}
 				})
 				this.$loading()
-				await this.$http.delete('/project/' + this.info.projectId)
+				await this.$http.delete('/project/' + this.info.id)
 				this.$loading.close()
 				await this.$alert('Project deleted successfully')
-				this.$router.replace('/')
+				// this.$router.replace('/')
+				location = 'index.html'
 			} catch (error) {
 				console.log(error)
 			}
 		},
 		async saveProject(body) {
-			return this.$http.put('/project/config/' + this.info.projectId, body)
+			return this.$http.put('/project/config/' + this.info.id, body)
 		},
 	},
 }
