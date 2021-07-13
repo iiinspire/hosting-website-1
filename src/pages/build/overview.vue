@@ -96,15 +96,15 @@ export default {
 			this.getLog()
 			this.getProjectInfo()
 		},
-		buildInfo({ data }) {
+		buildInfo({ name, data }) {
 			if(data.taskId == this.taskId) {
-				// console.log(name)
-			}
-			this.state = data.state
-			const last = this.logs[this.logs.length - 1]
-			if(last != data.content) {
-				this.logs.push(data.content)
-				this.goLogEnd()
+				console.log(this.taskId, name)
+				this.state = data.state
+				const last = this.logs[this.logs.length - 1]
+				if(name == 'log' && last != data.content) {
+					this.logs.push(data.content)
+					this.goLogEnd()
+				}
 			}
 		},
 	},

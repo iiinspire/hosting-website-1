@@ -41,9 +41,11 @@ export default {
 	methods: {
 		async getList() {
 			try {
-				const { data } = await this.$http.post('/domain/list', {
-					page: 1,
-					size: 10,
+				const { data } = await this.$http.get('/domain/list', {
+					params: {
+						page: 1,
+						size: 10,
+					},
 				})
 				console.log(data)
 			} catch (error) {
