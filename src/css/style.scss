@@ -117,5 +117,5 @@ $bdcolor: #E6E8EB;
 }
 .color-1 {
 	&.c-success { color: #69C07E; }
-	&.c-fail, &.c-error { color: #E43D3D; }
+	&.c-failure, &.c-error { color: #E43D3D; }
 }
