@@ -86,6 +86,10 @@ Date.prototype.toNiceTime = function(now, mode = 11) {
 	return timePart + ' ' + datePart
 }
 
+String.prototype.capitalize = function() {
+	return this.charAt(0).toUpperCase() + this.substr(1);
+}
+
 String.prototype.cutStr = function (pre = 100, trail = 0) {
 	if (this.length <= pre + trail) return this
 	let txt = this.substr(0, pre) + '...'

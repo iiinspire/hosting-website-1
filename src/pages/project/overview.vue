@@ -34,7 +34,7 @@
 				</div>
 			</div>
 
-			<div class="bd-1 pd-20 mt-5">
+			<div class="bd-1 pd-15 mt-5">
 				<v-row>
 					<v-col cols="12" md="6">
 						<v-img src="img/proj-bg-def.png" height="300"></v-img>
@@ -54,9 +54,9 @@
 							<div class="d-flex mt-6">
 								<div class="flex-1">
 									<div class="label-1">State</div>
-									<div class="color-suc">
-										<span class="dot-1" :class="state.toLowerCase()"></span>
-										{{ state }}
+									<div >
+										<span class="dot-1" :class="'c-'+state"></span>
+										<span class="color-1" :class="'c-'+state">{{ state.capitalize() }}</span>
 									</div>
 								</div>
 								<div class="flex-1">
@@ -107,7 +107,8 @@ export default {
 			return `${this.info.name}.4everland.app`
 		},
 		state() {
-			return this.info.lastBuild.state
+			const { state='Wait' } = this.info.lastBuild || {}
+			return state.toLowerCase()
 		},
 	},
 	methods: {

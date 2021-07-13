@@ -104,14 +104,18 @@ $bdcolor: #E6E8EB;
 .dot-1 {
 	display: inline-block;
 	vertical-align: middle;
-	margin-right: 3px;
+	margin-right: 5px;
 	padding: 3px;
 	border-radius: 100px;
 	background: #4A96FA;
-	&.success {
-		color: #69C07E;
+	&.c-success {
+		background: #69C07E;
 	}
-	&.fail, &.error {
-		color: #E43D3D;
+	&.c-fail, &.c-error {
+		background: #E43D3D;
 	}
+}
+.color-1 {
+	&.c-success { color: #69C07E; }
+	&.c-fail, &.c-error { color: #E43D3D; }
 }
