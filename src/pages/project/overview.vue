@@ -34,7 +34,7 @@
 				</div>
 			</div>
 
-			<div class="bd-1 pd-15 mt-5">
+			<div class="mt-5" :class="asMobile ? 'bdt-1 pt-5' : 'bd-1 pd-15'">
 				<v-row>
 					<v-col cols="12" md="6">
 						<v-img src="img/proj-bg-def.png" height="300"></v-img>
@@ -103,6 +103,9 @@ export default {
 			info: s => s.projectInfo,
 			nowDate: s => s.nowDate,
 		}),
+		asMobile() {
+			return this.$vuetify.breakpoint.smAndDown
+		},
 		domain() {
 			return `${this.info.name}.4everland.app`
 		},
