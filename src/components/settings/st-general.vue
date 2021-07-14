@@ -44,7 +44,7 @@
 			<div class="d-flex al-c">
 				<v-text-field persistent-placeholder v-model="form.outputDirectory"
 					label="Output Directory" :disabled="!overForm.outputDirectory"
-					placeholder="`public` if it exists, or `. `"/>
+					placeholder="`dist` if it exists, or `.`"/>
 				<v-switch v-model="overForm.outputDirectory" @change="onSwith('outputDirectory')" 
 					label="Override" class="ml-5"></v-switch>
 			</div>
@@ -72,7 +72,7 @@
 			<v-text-field outlined dense v-model="rootDirectory">
 
 			</v-text-field>
-			<v-btn color="primary" :disabled="rootDirectory == info.rootDirectory"
+			<v-btn color="primary" :disabled="rootDirectory == info.config.rootDirectory"
 				:loading="savingRoot" @click="onSaveRoot"
 				class="ml-4" style="margin-top: 2px;">Save</v-btn>
 		</div>
@@ -101,14 +101,14 @@ export default {
 		isCmdChange() {
 			let changed = false
 			for(const key in this.form) {
-				let val = this.info[key] || ''
+				let val = this.info.config[key] || ''
 				if(this.form[key] != val) changed = true
 			}
 			return changed
 		},
 	},
 	data() {
-		const { name } = this.info
+		const { name, config } = this.info
 		const form = {
 			framework: '',
 			outputDirectory: '',
@@ -117,12 +117,12 @@ export default {
 		}
 		const overForm = {}
 		for(const key in form) {
-			const val = form[key] = this.info.config[key] || ''
+			const val = form[key] = config[key] || ''
 			overForm[key] = !!val
 		}
 		return {
 			name,
-			rootDirectory: this.info.config.rootDirectory,
+			rootDirectory: config.rootDirectory,
 			form,
 			overForm,
 			frameworks,

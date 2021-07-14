@@ -45,7 +45,7 @@
 					</div>
 				</v-col>
 				<v-col cols="12" md="6">
-					<div class="pd-20" v-if="!logs.length">
+					<div class="pd-20" v-if="!projInfo.id">
 						<v-skeleton-loader type="article" />
 					</div>
 					<div class="fz-14" v-else>

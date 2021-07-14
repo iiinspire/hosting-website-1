@@ -30,8 +30,10 @@
 							</div>
 						</div>
 						<div class="ml-5">
-							<div class="gray">Ready</div>
-							<div class="mt-1 fz-13">1s</div>
+							<div class="gray">{{ it.state }}</div>
+							<div class="mt-1 fz-13">
+								<e-time>{{ it.createAt }}</e-time>
+							</div>
 						</div>
 					</div>
 					<div class="d-flex al-c flex-1">
