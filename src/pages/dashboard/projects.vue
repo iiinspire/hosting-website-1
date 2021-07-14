@@ -50,7 +50,7 @@
 						<span class="ml-2 line-1">{{ it.repo.namespace }}/{{ it.name }}</span>
 						<span class="ml-auto gray shrink-0">
 							<!-- Updated 20min ago -->
-							{{ new Date(it.repo.updateAt).toNiceTime(nowDate) }}
+							<e-time>{{ it.repo.updateAt }}</e-time>
 						</span>
 					</div>
 				</v-card-subtitle>
@@ -72,7 +72,6 @@ export default {
 	},
 	computed: {
 		...mapState({
-			nowDate: s => s.nowDate,
 			isFocus: s => s.isFocus,
 		}),
 	},

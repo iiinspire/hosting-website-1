@@ -43,7 +43,7 @@
 							</div>
 						</div>
 						<span class="fl-r gray fz-13" v-show="!asMobile">
-							{{ new Date(it.createAt).toNiceTime(nowDate) }} by {{ userInfo.username }}
+							<e-time :value="it.createAt"></e-time> by {{ userInfo.username }}
 						</span>
 						<v-menu>
 							<template v-slot:activator="{ attrs, on }">
@@ -81,7 +81,6 @@ export default {
 		...mapState({
 			info: s => s.projectInfo,
 			userInfo: s => s.userInfo,
-			nowDate: s => s.nowDate,
 		}),
 		asMobile() {
 			return this.$vuetify.breakpoint.smAndDown

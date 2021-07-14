@@ -62,7 +62,7 @@
 								<div class="flex-1">
 									<div class="label-1">Created</div>
 									<div>
-										{{ new Date(info.repo.updateAt).toNiceTime(nowDate) }}
+										<e-time>{{ info.repo.updateAt }}</e-time>
 									</div>
 								</div>
 							</div>
@@ -101,7 +101,6 @@ export default {
 		...mapState({
 			userInfo: s => s.userInfo,
 			info: s => s.projectInfo,
-			nowDate: s => s.nowDate,
 		}),
 		asMobile() {
 			return this.$vuetify.breakpoint.smAndDown

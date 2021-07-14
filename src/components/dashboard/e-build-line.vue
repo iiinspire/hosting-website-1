@@ -8,7 +8,7 @@
 		{{ type }}
 	</span>
 	<span class="gray shrink-0">
-		{{ new Date(info.updateAt).toNiceTime(nowDate) }}
+		<e-time>{{ info.updateAt }}</e-time>
 	</span>
 </div>
 </template>
@@ -21,9 +21,6 @@ export default {
 		info: Object,
 	},
 	computed: {
-		nowDate() {
-			return this.$store.state.nowDate
-		},
 		domain() {
 			let mid = ''
 			if(this.type == 'Latest') {

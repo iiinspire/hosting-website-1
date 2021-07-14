@@ -64,13 +64,13 @@
 							<div class="flex-1">
 								<div class="label-1">Duration</div>
 								<div>
-									{{ new Date(projInfo.lastBuild.createAt).toNiceTime(nowDate) }}
+									<e-time>{{ projInfo.lastBuild.createAt }}</e-time>
 								</div>
 							</div>
 							<div class="flex-1">
 								<div class="label-1">Age</div>
 								<div>
-									{{ new Date(projInfo.lastBuild.createAt).toNiceTime(nowDate) }}
+									<e-time>{{ projInfo.lastBuild.createAt }}</e-time>
 								</div>
 							</div>
 						</div>
@@ -128,7 +128,6 @@ export default {
 		...mapState({
 			projInfo: s => s.projectInfo,
 			buildInfo: s => s.buildInfo,
-			nowDate: s => s.nowDate,
 		}),
 		asMobile() {
 			return this.$vuetify.breakpoint.smAndDown

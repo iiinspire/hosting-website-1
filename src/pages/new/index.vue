@@ -38,7 +38,7 @@
 										'op-0': !it.private,
 									}">mdi-lock-outline</v-icon>
 									<span class="ml-2 mr-3 gray fz-13 shrink-0">
-										{{ new Date(it.updateAt).toNiceTime(nowDate) }}
+										<e-time>{{ it.updateAt }}</e-time>
 									</span>
 									<v-btn class="ml-auto" color="primary" small @click="onImport(it)">Import</v-btn>
 								</div>
@@ -108,7 +108,6 @@ export default {
 	},
 	computed: {
 		...mapState({
-			nowDate: s => s.nowDate,
 			isFocus: s => s.isFocus,
 		})
 	},

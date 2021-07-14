@@ -12,7 +12,7 @@
 					<div class="ml-5">
 						<h3 class="color-1">{{ info.repo.pathPre }}</h3>
 						<div class="gray fz-13">
-							Connected at {{ new Date(info.repo.updateAt).toNiceTime(nowDate) }}
+							Connected at <e-time :value="info.repo.updateAt"></e-time>
 						</div>
 						<v-btn class="mt-2" @click="setConnect()"
 							:loading="savingConnect"
@@ -34,7 +34,7 @@
 							v-for="(it, i) in repoList" :key="i">
 							<span class="fz-17 line-1">{{ it.name }}</span>
 							<!-- <span class="ml-3 mr-3 gray fz-13 shrink-0">
-								{{ new Date(it.updateAt).toNiceTime(nowDate) }}
+								{{ it.updateAt }}
 							</span> -->
 							<v-btn class="ml-auto" color="primary" small @click="onConnect(it)">Connect</v-btn>
 						</div>
@@ -115,7 +115,6 @@ export default {
 	computed: {
 		...mapState({
 			isFocus: s => s.isFocus,
-			nowDate: s => s.nowDate,
 		}),
 		asMobile() {
 			return this.$vuetify.breakpoint.smAndDown
