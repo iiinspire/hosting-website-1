@@ -10,7 +10,7 @@
 				<span class="ml-1">{{ info.repo ? info.repo.pathPre : '--' }}</span>
 			</div>
 			<template #right>
-				<v-btn small depressed color="primary">Visit</v-btn>
+				<v-btn small depressed color="primary" v-if="info.id">Visit</v-btn>
 			</template>
 		</e-card-head-1>
 		
@@ -20,7 +20,7 @@
 					<div class="fz-18">Production Deploymen</div>
 					<div class="fz-13 mt-1 gray">The deployment that is available to your visitors</div>
 				</div>
-				<div class="d-flex al-c" :class="{
+				<div v-if="info.id" class="d-flex al-c" :class="{
 					'mt-4': $vuetify.breakpoint.mobile,
 				}">
 					<v-btn small class="mr-5" 
