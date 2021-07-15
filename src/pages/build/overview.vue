@@ -45,7 +45,7 @@
 					</div>
 				</v-col>
 				<v-col cols="12" md="6">
-					<div class="pd-20" v-if="!projInfo.id">
+					<div class="pd-20" v-if="!info.taskId">
 						<v-skeleton-loader type="article" />
 					</div>
 					<div class="fz-14" v-else>
@@ -64,20 +64,20 @@
 							<div class="flex-1">
 								<div class="label-1">Duration</div>
 								<div>
-									<e-time>{{ projInfo.lastBuild.createAt }}</e-time>
+									<e-time :endAt="info.endAt">{{ info.createAt }}</e-time>
 								</div>
 							</div>
 							<div class="flex-1">
 								<div class="label-1">Age</div>
 								<div>
-									<e-time>{{ projInfo.lastBuild.createAt }}</e-time>
+									<e-time>{{ info.createAt }}</e-time>
 								</div>
 							</div>
 						</div>
 
 						<div class="label-1 mt-6">Domains</div>
 						<div>
-							{{ projInfo.name }}.4verland.app
+							{{ info.buildConfig.name }}.4verland.app
 						</div>
 
 						<div class="label-1 mt-6">
@@ -85,9 +85,12 @@
 						</div>
 						<div class="d-flex al-c">
 							<v-icon size="18">mdi-github</v-icon>
-							<span class="ml-2" v-if="projInfo.repo">
-								{{ projInfo.repo.defaultBranch }}
+							<span class="ml-2">
+								{{ info.buildConfig.currentBranch }}
 							</span>
+						</div>
+						<div class="gray mt-1">
+							{{ info.commits.message }}
 						</div>
 					</div>
 				</v-col>
@@ -126,14 +129,13 @@ import { mapState } from 'vuex'
 export default {
 	computed: {
 		...mapState({
-			projInfo: s => s.projectInfo,
 			buildInfo: s => s.buildInfo,
 		}),
 		asMobile() {
 			return this.$vuetify.breakpoint.smAndDown
 		},
-		projId() {
-			return this.$route.params.projId
+		projName() {
+			return this.$route.params.projName
 		},
 		taskId() {
 			return this.$route.params.taskId
@@ -144,6 +146,7 @@ export default {
 	},
 	data() {
 		return {
+			info: {},
 			logs: [],
 			deploying: false,
 			state: '',
@@ -151,8 +154,7 @@ export default {
 	},
 	watch: {
 		taskId() {
-			this.getLog()
-			this.getProjectInfo()
+			this.initData()
 		},
 		buildInfo({ name, data }) {
 			if(data.taskId == this.taskId) {
@@ -167,15 +169,25 @@ export default {
 		},
 	},
 	mounted() {
-		this.getLog()
-		this.getProjectInfo()
+		this.initData()
 	},
 	methods: {
-		async getProjectInfo() {
-			if(this.projInfo.id != this.projId) {
-				await this.$store.dispatch('getProjectInfo', this.projId)
+		async initData() {
+			try {
+				const { data } = await this.$http.get(`/project/task/object/${this.taskId}`)
+				this.info = data.task
+				this.state = data.task.state.toLowerCase()
+				let lines = []
+				for(const it of data.log) {
+					it.content.split(/\n/).forEach(line => {
+						lines.push(line)
+					})
+				}
+				this.logs = lines
+				this.goLogEnd()
+			} catch (error) {
+				console.log(error)
 			}
-			this.state = this.projInfo.lastBuild.state.toLowerCase()
 		},
 		onCopied() {
 			this.$notice('copied')
@@ -188,30 +200,14 @@ export default {
 					confirmText: 'Redeploy',
 				})
 				this.deploying = true
-				const { data } = await this.$http.post(`/project/${this.projId}/build`)
-				this.$router.replace(`/build/${this.projId}/${data.taskId}/overview`)
+				const { data } = await this.$http.post(`/project/${this.projName}/build`)
+				this.$router.replace(`/build/${this.projName}/${data.taskId}/overview`)
 			} catch (error) {
 				console.log(error, 'build err')
 			}
 			this.deploying = false
 		},
-		async getLog() {
-			try {
-				this.logs = []
-				const { data } = await this.$http.get(`/project/${this.taskId}/deployment/log`)
-				console.log(data)
-				let lines = []
-				for(const it of data) {
-					it.content.split(/\n/).forEach(line => {
-						lines.push(line)
-					})
-				}
-				this.logs = lines
-				this.goLogEnd()
-			} catch (error) {
-				console.log(error, 'log')
-			}
-		},
+		
 		goLogEnd() {
 			this.$nextTick(() => {
 				const el = this.$refs.con

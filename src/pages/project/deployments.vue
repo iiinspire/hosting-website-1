@@ -100,12 +100,12 @@ export default {
 				},
 				{
 					text: 'Inspect Deployment',
-					link: '/build/{projId}/{taskId}/overview',
+					link: '/build/{projName}/{taskId}/overview',
 					icon: 'card-search-outline',
 				},
 				{
 					text: 'View Source',
-					link: '/build/{projId}/{taskId}/source',
+					link: '/build/{projName}/{taskId}/source',
 					icon: 'xml',
 				},
 				{
@@ -124,14 +124,14 @@ export default {
 		onOpt(opt, it) {
 			let { name, link } = opt
 			if(link) {
-				link = link.replace('{taskId}', it.taskId).replace('{projId}', it.projectId)
+				link = link.replace('{taskId}', it.taskId).replace('{projName}', it.buildConfig.name)
 				this.$router.push(link)
 			}
 			else console.log(name)
 		},
 		async getList() {
 			try {
-				const { data } = await this.$http.get('/project/task/' + this.id)
+				const { data } = await this.$http.get(`/project/task/${this.id}/all`)
 				this.list = data
 			} catch (error) {
 				console.log(error)

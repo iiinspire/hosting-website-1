@@ -38,7 +38,7 @@ export default {
 			if(this.endAt) {
 				return new Date(this.endAt)
 			}
-			return
+			return null
 		},
 		niceTime() {
 			let time = this.date.toNiceTime(this.endDate || this.nowDate)

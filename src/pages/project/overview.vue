@@ -118,7 +118,7 @@ export default {
 			const { lastBuild } = this.info
 			let link
 			if(name == 'log') {
-				link = `/build/${this.id}/${lastBuild.taskId}/overview`
+				link = `/build/${this.info.name}/${lastBuild.taskId}/overview`
 			} 
 			else if(name == 'domain') {
 				link = `/project/${this.id}/settings?tab=1`
