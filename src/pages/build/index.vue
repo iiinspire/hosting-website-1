@@ -3,7 +3,7 @@
 	<div class="bg-white shadow-1 pos-s z-100 top-0">
 		<div class="con-1">
 			<v-tabs :color="$color1" v-model="tabIdx">
-				<v-tab replace :to="`/build/${projId}/${taskId}/${it.path}`"
+				<v-tab replace :to="`/build/${projName}/${taskId}/${it.path}`"
 					v-for="(it, i) in tabs" :key="i">
 					{{ it.title }}
 				</v-tab>
@@ -23,9 +23,9 @@
 <script>
 export default {
 	data() {
-		const { projId, taskId } = this.$route.params
+		const { projName, taskId } = this.$route.params
 		return {
-			projId,
+			projName,
 			taskId,
 			tabIdx: null,
 			tabs: [
