@@ -1,0 +1,112 @@
+<template>
+<div>
+	<v-app-bar :app="false" :color="$bg1" dark>
+		<a href="/">
+			<e-logo class="d-b"></e-logo>
+			<!-- <img src="img/icon.svg" style="height: 30px" class="d-b" /> -->
+		</a>
+		<v-spacer></v-spacer>
+		<template v-if="asMobile">
+			<v-menu class="z-1000">
+				<template v-slot:activator="{ attrs, on }">
+					<v-btn icon
+						v-bind="attrs"
+						v-on="on">
+						<v-icon>mdi-dots-vertical</v-icon>
+						<!-- <v-icon>mdi-menu</v-icon> -->
+					</v-btn>
+				</template>
+				<v-list>
+					<v-list-item link
+						@click="onMenu(it)"
+						v-for="(it, i) in links" :key="i">
+						<v-list-item-title>
+							<!-- <v-icon size="16" v-if="it.icon">mdi-{{it.icon}}</v-icon> -->
+							<span class="fz-15">{{it.label}}</span>
+						</v-list-item-title>
+					</v-list-item>
+				</v-list>
+			</v-menu>
+		</template>
+		<template v-else>
+			<v-menu class="z-1000" v-for="(it, i) in links" :key="i">
+				<template v-slot:activator="{ attrs, on }">
+					<v-btn :color="it.color || $bg1" class="ml-5" :outlined="it.outlined"
+						v-bind="attrs"
+						v-on="on"
+						:class="it.outlined ? '' : 'op-6'"
+						>
+						<v-icon size="16" class="mr-1" v-if="it.icon">mdi-{{ it.icon }}</v-icon>
+						<span class="">{{ it.label }}</span>
+						<v-icon v-if="it.subs">mdi-chevron-down</v-icon>
+					</v-btn>
+				</template>
+				<v-list v-if="it.subs">
+					<v-list-item link
+						@click="onMenu(sub)"
+						v-for="(sub, j) in it.subs" :key="j">
+						<v-list-item-title>
+							<span class="fz-15">{{sub.label}}</span>
+						</v-list-item-title>
+					</v-list-item>
+				</v-list>
+			</v-menu>
+			
+		</template>
+	</v-app-bar>
+</div>
+</template>
+
+<script>
+export default {
+	computed: {
+		asMobile() {
+			return this.$vuetify.breakpoint.smAndDown
+		},
+		userInfo() {
+			return this.$store.state.userInfo
+		},
+		links() {
+			let links = [
+				{
+					label: 'Feedback',
+					icon: 'message-processing-outline',
+				},
+				{
+					label: 'Changelog',
+				},
+				{
+					label: 'Docs',
+				},
+			]
+			if(this.userInfo.username) {
+				links.push({
+					label: this.userInfo.username,
+					icon: 'github',
+					color: '#4A96FA',
+					outlined: true,
+					subs: [
+						{
+							label: 'settings',
+						},
+						{
+							label: 'logout',
+						},
+					]
+				})
+			}
+			return links
+		},
+	},
+	data() {
+		return {
+			
+		}
+	},
+	methods: {
+		onMenu() {
+
+		}
+	}
+}
+</script>

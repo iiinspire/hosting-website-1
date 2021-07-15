@@ -21,3 +21,4 @@ Vue.prototype.$openWindow = (url) => {
 }
 
 Vue.prototype.$color1 = '#4A96FA'
+Vue.prototype.$bg1 = '#1e2226'
