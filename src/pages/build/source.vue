@@ -1,7 +1,9 @@
 <template>
 <v-card outlined>
 	<div class="pd-20">
-		<v-treeview :items="dirList" />
+		<v-skeleton-loader type="article" v-if="!dirList.length" />
+		<v-treeview :load-children="getFiles"
+			dense :items="dirList" v-else />
 	</div>
 </v-card>
 </template>
@@ -23,16 +25,29 @@ export default {
 		}),
 	},
 	mounted() {
-		this.getOutput()
+		this.getFiles()
 	},
 	methods: {
-		async getOutput() {
+		async getFiles(item) {
+			const params = {}
+			if(item) {
+				params.cid = item.hash
+			}
 			const { data } = await this.$http.get(`/artifact/deployment/${this.taskId}/output`, {
-				params: {
-					// rootPath,
-				},
+				params,
 			})
-			console.log(data)
+			data.forEach(it => {
+				it.id = it.hash
+				if(it.type == 'Directory') {
+					it.type = 'dir'
+					it.children = []
+				}
+			})
+			if(item) {
+				item.children.push(...data)
+			} else {
+				this.dirList = data
+			}
 		},
 	}
 }

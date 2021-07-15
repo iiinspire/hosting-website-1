@@ -41,6 +41,7 @@
 				</div>
 				<v-radio-group v-model="srcDir">
 					<v-treeview dense :open="[initSrcDir]"
+						:load-children="getRepoDir"
 						:items="dirList">
 						<template v-slot:prepend="{item}">
 							<v-radio v-if="item.type == 'dir'" :value="item.id"></v-radio>
@@ -245,7 +246,32 @@ export default {
 			this.form.framework = 'vue'
 			try {
 				this.selecting = true
-				const data = await this.getRepoDir()
+				await this.getRepoDir()
+				this.curStep = 1
+			} catch (error) {
+				console.log(error)
+				this.curStep = 2
+			}
+			this.selecting = false
+		},
+		async getRepoDir(item) {
+			const params = {}
+			if(item) {
+				params.rootPath = item.id
+			}
+			let { data } = await this.$http.get('/repo/dir/' + this.importItem.name, {
+				params,
+			})
+			data = data.map(it => {
+				it.id = it.fullPath
+				if(it.type == 'dir') it.children = []
+				return it
+			}).sort((a) => {
+				return a.type == 'dir' ? -1 : 1
+			})
+			if(item) {
+				item.children = data
+			} else {
 				this.dirList = [
 					{
 						name: this.importItem.name,
@@ -254,31 +280,7 @@ export default {
 						children: data,
 					},
 				]
-				this.curStep = 1
-			} catch (error) {
-				console.log(error)
-				this.curStep = 2
 			}
-			this.selecting = false
-		},
-		async getRepoDir(rootPath) {
-			const { data } = await this.$http.get('/repo/dir/' + this.importItem.name, {
-				params: {
-					rootPath,
-				}
-			})
-			return data.map(it => {
-				it.id = !rootPath ? it.name : `${rootPath}/${it.name}`
-				if(it.type == 'dir') it.children = [
-					{
-						id: 1,
-						name: 'loading...'
-					}
-				]
-				return it
-			}).sort((a) => {
-				return a.type == 'dir' ? -1 : 1
-			})
 		},
 		onBack() {
 			if(this.curStep > 0) this.curStep -= 1
