@@ -2,11 +2,11 @@
 <v-tooltip v-if="date" top>
 	<template v-slot:activator="{ on, attrs }">
 		<span v-bind="attrs" v-on="on">
-			{{ date.toNiceTime(nowDate) }}
+			{{ niceTime }}
 		</span>
 	</template>
 	<span>
-		{{ date.format() }}
+		{{ fullTime }}
 	</span>
 </v-tooltip>
 </template>
@@ -15,6 +15,7 @@
 export default {
 	props: {
 		value: null,
+		endAt: null,
 	},
 	computed: {
 		nowDate() {
@@ -33,6 +34,25 @@ export default {
 			if(!val) return
 			return new Date(val)
 		},
+		endDate() {
+			if(this.endAt) {
+				return new Date(this.endAt)
+			}
+			return
+		},
+		niceTime() {
+			let time = this.date.toNiceTime(this.endDate || this.nowDate)
+			if(this.endAt) time = time.replace('ago', '')
+			return time
+		},
+		fullTime() {
+			let time = this.date.format()
+			if(this.endDate) {
+				time += ' ~ ' + this.endDate.format()
+			}
+			return time
+		},
+		
 	},
 }
 </script>
