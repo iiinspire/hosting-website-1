@@ -8,7 +8,7 @@
 		</e-card-head-1>
 		<div class="pd-20">
 			<div class="mb-5 ta-r">
-				<v-btn small>Add</v-btn>
+				<v-btn small @click="onAdd">Add</v-btn>
 				<v-btn small class="ml-5">Delete</v-btn>
 			</div>
 			<v-data-table class="-elevation-1" :headers="headers" :items="list"></v-data-table>
@@ -39,6 +39,16 @@ export default {
 		this.getList()
 	},
 	methods: {
+		async onAdd() {
+			try {
+				const { data } = await this.$http.post('/domain', {
+					// domain,
+				})
+				console.log(data)
+			} catch (error) {
+				console.log(error)
+			}
+		},
 		async getList() {
 			try {
 				const { data } = await this.$http.get('/domain/list', {

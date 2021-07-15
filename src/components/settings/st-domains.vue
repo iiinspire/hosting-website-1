@@ -5,9 +5,12 @@
 		These domains are assigned to your Production Deployments.Optionally, a different Git branch or a redirection to another domain can be configured for each one.
 	</div>
 	<div class="mt-5 d-flex">
-		<v-text-field outlined dense v-model="form.website" placeholder="mywebsite.com">
+		<v-text-field outlined dense v-model="domain" placeholder="mywebsite.com">
 		</v-text-field>
-		<v-btn color="primary" class="ml-4" style="margin-top: 2px;">Save</v-btn>
+		<v-btn @click="onAdd" :disabled="!domain"
+			color="primary" class="ml-4" style="margin-top: 2px;">
+			Save
+		</v-btn>
 	</div>
 	<div class="bd-1 mt-1">
 		<div class="pd-20">
@@ -24,10 +27,29 @@
 export default {
 	data() {
 		return {
-			form: {
-				website: '',
-			}
+			domain: '',
 		}
+	},
+	computed: {
+		info() {
+			return this.$store.state.projectInfo
+		},
+	},
+	methods: {
+		async onAdd() {
+			try {
+				if(!/(\w+\.)+\w{2,10}/.test(this.domain)) {
+					return this.$alert('invalid domain')
+				}
+				const { data } = await this.$http.post('/domain', {
+					domain: this.domain,
+					projectId: this.info.id,
+				})
+				console.log(data)
+			} catch (error) {
+				console.log(error)
+			}
+		},
 	}
 }
 </script>
