@@ -2,7 +2,7 @@
 <v-tooltip v-if="date" top>
 	<template v-slot:activator="{ on, attrs }">
 		<span v-bind="attrs" v-on="on">
-			{{ niceTime }}
+			{{ pre }} {{ niceTime }}
 		</span>
 	</template>
 	<span>
@@ -16,6 +16,7 @@ export default {
 	props: {
 		value: null,
 		endAt: null,
+		pre: String,
 	},
 	computed: {
 		nowDate() {

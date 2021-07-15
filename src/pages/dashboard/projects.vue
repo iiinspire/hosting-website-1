@@ -28,12 +28,13 @@
 		<v-col cols="12" :md="6"
 			v-for="(it, i) in list" :key="i">
 			<v-card outlined class="hover-c1 trans-200" :to="`/project/${it.id}/overview`">
-				<v-img src="img/proj-bg-def.png" height="120"></v-img>
+				<v-img src="img/proj-bg-def.png" height="160"></v-img>
 				<v-card-title>
-					<span>{{ it.name }}</span>
-					<div class="ml-auto">
-						<v-btn small depressed color="primary" @click.prevent="onVisit">Visit</v-btn>
-					</div>
+					<span class="mr-auto">{{ it.name }}</span>
+					<v-btn class="mr-3" icon @click.prevent="onChart(it)">
+						<v-icon :color="$color1">mdi-file-chart-outline</v-icon>
+					</v-btn>
+					<v-btn small depressed color="primary" @click.prevent="onVisit(it)">Visit</v-btn>
 				</v-card-title>
 				<v-card-subtitle>
 					<div class="mt-5" style="min-height: 60px">
@@ -44,16 +45,13 @@
 
 				<v-divider></v-divider>
 
-				<v-card-subtitle>
-					<div class="d-flex al-c" v-if="it.repo">
-						<v-icon :color="$color1">mdi-github</v-icon>
-						<span class="ml-2 line-1">{{ it.repo.namespace }}/{{ it.name }}</span>
-						<span class="ml-auto gray shrink-0">
-							<!-- Updated 20min ago -->
-							<e-time>{{ it.repo.updateAt }}</e-time>
-						</span>
-					</div>
-				</v-card-subtitle>
+				<div class="pd-12-15 fz-14 d-flex al-c" v-if="it.repo">
+					<v-icon :color="$color1" size="18">mdi-github</v-icon>
+					<span class="ml-1 line-1">{{ it.repo.namespace }}/{{ it.name }}</span>
+					<span class="ml-auto gray shrink-0">
+						<e-time pre="Updated">{{ it.repo.updateAt }}</e-time>
+					</span>
+				</div>
 			</v-card>
 		</v-col>
 	</v-row>
@@ -85,8 +83,11 @@ export default {
 		addNew() {
 			this.$router.push('/new')
 		},
+		onChart() {
+			this.$notice('chart')
+		},
 		onVisit() {
-			this.$notice('develop')
+			this.$notice('visit')
 		},
 		async getList() {
 			try {
