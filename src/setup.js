@@ -7,6 +7,14 @@ import frameworks from './assets/frameworks.json'
 
 Vue.use(VueClipboards)
 
+Vue.prototype.$sleep = (msec = 300) => {
+	return new Promise((resolve) => {
+		setTimeout(() => {
+			resolve()
+		}, msec)
+	})
+}
+
 Vue.prototype.$getFramework = name => {
 	let obj = frameworks.filter(it => it.slug == name)[0]
 	if(!obj) {

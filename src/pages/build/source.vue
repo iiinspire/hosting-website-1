@@ -3,11 +3,12 @@
 	<div class="pd-20">
 		<v-row>
 			<v-col cols="12" md="5">
-				<v-skeleton-loader type="article" v-if="!dirList.length" />
-				<v-treeview :load-children="getFiles"
+				<v-skeleton-loader type="article" v-if="initLoading" />
+				<v-treeview v-else :load-children="getFiles"
 					@update:active="onActive"
+					open-all
 					activatable hoverable open-on-click
-					dense :items="dirList" v-else>
+					dense :items="dirList">
 					<template v-slot:prepend="{ item, open }">
 						<v-icon v-if="item.type == 'dir'">
 							{{ open ? 'mdi-folder-open' : 'mdi-folder' }}
@@ -17,9 +18,13 @@
 						</v-icon>
 					</template>
 				</v-treeview>
+				
 			</v-col>
-			<v-col cols="12" md="7" v-if="openCid">
+			<v-col cols="12" md="7" v-if="fileName">
 				<v-skeleton-loader type="article" v-if="loading" />
+				<div v-else-if="isImg">
+					<img :src="result" :alt="fileName" style="max-width: 100%;">
+				</div>
 				<div v-else class="fz-14 lh-2 ov-a" style="max-height: 80vh;">
 					{{ result }}
 				</div>
@@ -36,6 +41,7 @@ export default {
 	data() {
 		const { taskId } = this.$route.params
 		return {
+			initLoading: true,
 			taskId,
 			dirList: [],
 			files: {
@@ -53,13 +59,17 @@ export default {
 			},
 			result: null,
 			loading: false,
-			openCid: null,
+			fileName: null,
 		}
 	},
 	computed: {
 		...mapState({
 			projInfo: s => s.projectInfo,
 		}),
+		isImg() {
+			const ftype = /\.(\w+)$/.exec(this.fileName)[1]
+			return /ico|png|jpg|jpeg|gif/.test(ftype)
+		},
 	},
 	mounted() {
 		this.getFiles()
@@ -68,12 +78,18 @@ export default {
 		async onActive(it) {
 			const [hash, name] = it[0].split(',')
 			try {
-				this.openCid = hash
+				this.fileName = name
 				this.loading = true
 				this.result = ''
-				const { data } = await this.$http.get(`/artifact/deployment/${hash}/file/${name}`)
-				// console.log(data)
-				this.result = data
+				const url = `/artifact/deployment/${hash}/file/${name}`
+				if(this.isImg) {
+					await this.$sleep(500)
+					this.result = url
+				} else {
+					const { data } = await this.$http.get(url)
+					// console.log(data)
+					this.result = data
+				}
 			} catch (error) {
 				console.log(error)
 			}
@@ -99,7 +115,11 @@ export default {
 			if(item) {
 				item.children.push(...data)
 			} else {
+				if(data.length == 1) {
+					await this.getFiles(data[0])
+				}
 				this.dirList = data
+				this.initLoading = false
 			}
 		},
 	}
