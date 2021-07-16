@@ -118,10 +118,10 @@ $bdcolor: #E6E8EB;
 	&.empty {
 		background: #aaa;
 	}
-	&.c-success {
+	&.success {
 		background: #69C07E;
 	}
-	&.c-failure, &.c-error {
+	&.failure, &.error {
 		background: #E43D3D;
 	}
 }
