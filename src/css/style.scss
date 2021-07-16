@@ -115,13 +115,13 @@ $bdcolor: #E6E8EB;
 	padding: 3px;
 	border-radius: 100px;
 	background: #f3a536;
-	&.empty {
+	&.c-empty {
 		background: #aaa;
 	}
-	&.success {
+	&.c-success {
 		background: #69C07E;
 	}
-	&.failure, &.error {
+	&.c-failure, &.c-error {
 		background: #E43D3D;
 	}
 }
