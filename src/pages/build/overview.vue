@@ -91,8 +91,8 @@
 								{{ info.buildConfig.currentBranch }}
 							</span>
 						</div>
-						<div class="gray mt-1">
-							{{ info.commits.message }}
+						<div class="mt-1">
+							<e-commit :info="info.commits"></e-commit>
 						</div>
 					</div>
 				</v-col>
@@ -131,6 +131,7 @@ import { mapState } from 'vuex'
 export default {
 	computed: {
 		...mapState({
+			projInfo: s => s.projectInfo,
 			buildInfo: s => s.buildInfo,
 			nowDate: s => s.nowDate,
 		}),
@@ -192,6 +193,9 @@ export default {
 				}
 				this.logs = lines
 				this.goLogEnd()
+				if(this.info.projectId != this.projInfo.id) {
+					await this.$store.dispatch('getProjectInfo', this.info.projectId)
+				}
 			} catch (error) {
 				console.log(error)
 			}

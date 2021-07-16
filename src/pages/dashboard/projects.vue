@@ -2,7 +2,6 @@
 .hover-c1:hover {
 	box-shadow: 0 2px 10px #a2cae7;
 	border-color: #a2cae7;
-	cursor: pointer;
 }
 </style>
 
@@ -27,10 +26,12 @@
 	<v-row v-else>
 		<v-col cols="12" :md="6"
 			v-for="(it, i) in list" :key="i">
-			<v-card outlined class="hover-c1 trans-200" :to="`/project/${it.id}/overview`">
-				<v-img src="img/proj-bg-def.png" height="160"></v-img>
+			<v-card outlined class="hover-c1 trans-200">
+				<a :href="`#/project/${it.id}/overview`">
+					<v-img src="img/proj-bg-def.png" height="160"></v-img>
+				</a>
 				<v-card-title>
-					<span class="mr-auto">{{ it.name }}</span>
+					<a :href="`#/project/${it.id}/overview`" class="mr-auto b">{{ it.name }}</a>
 					<v-btn class="mr-3" icon @click.prevent="onChart(it)">
 						<v-icon :color="$color1">mdi-file-chart-outline</v-icon>
 					</v-btn>
@@ -48,13 +49,14 @@
 
 				<v-divider></v-divider>
 
-				<div class="pd-12-15 fz-14 d-flex al-c" v-if="it.repo">
+				<a :href="`https://github.com/${it.repo.namespace}/${it.name}`" target="_blank"
+					class="pd-12-15 fz-14 d-flex al-c b" v-if="it.repo">
 					<v-icon :color="$color1" size="18">mdi-github</v-icon>
 					<span class="ml-1 line-1">{{ it.repo.namespace }}/{{ it.name }}</span>
 					<span class="ml-auto gray shrink-0">
 						<e-time pre="Updated">{{ it.repo.updateAt }}</e-time>
 					</span>
-				</div>
+				</a>
 			</v-card>
 		</v-col>
 	</v-row>

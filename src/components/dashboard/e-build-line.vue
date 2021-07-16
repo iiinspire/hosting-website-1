@@ -5,17 +5,17 @@
 	<template v-if="type == 'Production' && !info.state">
 		<span class="gray">No Production Deployment</span>
 	</template>
-	<div class="d-flex al-c shrink-1" v-ripple @click.prevent="onClick" v-else>
-		<span class="line-1 shrink-1">
+	<template class="d-flex al-c shrink-1" v-ripple @click.prevent="onClick" v-else>
+		<a class="line-1 shrink-1 b" :href="`#/build/${name}/${info.taskId}/overview`">
 			{{ info.domain }}
-		</span>
+		</a>
 		<span class="bd-1 bg-f8 ml-3 mr-3 pl-2 pr-2 bdrs-5 fz-12">
 			{{ type }}
 		</span>
 		<span class="gray shrink-0">
 			<e-time>{{ info.updateAt }}</e-time>
 		</span>
-	</div>
+	</template>
 </div>
 </template>
 
@@ -30,10 +30,6 @@ export default {
 		
 	},
 	methods: {
-		onClick() {
-			const { taskId } = this.info
-			if(taskId) this.$router.push(`/build/${this.name}/${taskId}/overview`)
-		},
 	},
 }
 </script>

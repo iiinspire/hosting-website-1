@@ -17,6 +17,15 @@ body {
 		p {
 			margin-bottom: 5px;
 		}
+		a {
+			text-decoration: none;
+			&.b {
+				color: #333;
+			}
+			&.u:hover {
+				text-decoration: underline;
+			}
+		}
 	}
 	.v-dialog {
 		background: #fff;
@@ -34,15 +43,10 @@ body {
 	}
 	
 }
-.color-1, a {
+.color-1 {
 	color: $color1;
 }
-a {
-	text-decoration: none;
-	&.u:hover {
-		text-decoration: underline;
-	}
-}
+
 .v-main {
 	background: linear-gradient(90deg, #fff, #e0e7f2 10%,#fff 70%, #f7ecec);
 }

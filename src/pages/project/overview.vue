@@ -83,9 +83,9 @@
 									{{ info.repo.defaultBranch }}
 								</span>
 							</div>
-							<!-- <div class="gray mt-1">
-								{{ info.commits.message }}
-							</div> -->
+							<div class="mt-1">
+								<e-commit :info="info.commits"></e-commit>
+							</div>
 						</template>
 						<v-skeleton-loader v-else type="article" />
 					</v-col>
