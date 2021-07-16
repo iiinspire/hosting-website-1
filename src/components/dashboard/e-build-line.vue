@@ -1,7 +1,7 @@
 <template>
 <div class="d-flex al-c mt-2 fz-13"
 	v-if="info && info.domain">
-	<span class="dot-1 mr-1" :class="(info.state || 'wait').toLowerCase()"></span>
+	<span class="dot-1 mr-1" :class="(info.state || 'empty').toLowerCase()"></span>
 	<template v-if="type == 'Production' && !info.state">
 		<span class="gray">No Production Deployment</span>
 	</template>

@@ -111,6 +111,9 @@ $bdcolor: #E6E8EB;
 	padding: 3px;
 	border-radius: 100px;
 	background: #f3a536;
+	&.empty {
+		background: #aaa;
+	}
 	&.c-success {
 		background: #69C07E;
 	}
