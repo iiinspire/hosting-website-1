@@ -16,7 +16,7 @@ export default {
 		href() {
 			const { url, prefix, hash } = this.info
 			if(url) return url
-			if(prefix) return prefix + '/commit' + hash
+			if(prefix) return prefix + 'commit/' + hash
 			const { namespace, name } = this.projInfo.repo || {}
 			if(!name) return null
 			return `https://github.com/${namespace}/${name}/commit/${hash}`
