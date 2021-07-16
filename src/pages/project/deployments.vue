@@ -45,7 +45,7 @@
 							</div>
 						</div>
 						<span class="fl-r gray fz-13" v-show="!asMobile">
-							<e-time :value="it.createAt"></e-time> by {{ userInfo.username }}
+							<e-time :value="it.createAt" :sub="'by '+userInfo.username"></e-time>
 						</span>
 						<v-menu>
 							<template v-slot:activator="{ attrs, on }">

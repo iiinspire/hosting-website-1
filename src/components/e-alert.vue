@@ -108,6 +108,7 @@ export default {
 		Vue.prototype.$loading = (title, opts={}) => {
 			return showModal({
 				title,
+				maskClick: true,
 				...opts,
 				type: 'loading',
 				isLoading: true,

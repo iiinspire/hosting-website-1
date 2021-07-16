@@ -92,11 +92,11 @@ export default {
 			if(username) {
 				const subs = [
 					{
-						label: 'settings',
+						label: 'Settings',
 						title: username,
 					},
 					{
-						label: 'logout',
+						label: 'Logout',
 					},
 				]
 				if(this.asMobile) links = links.concat(subs)
