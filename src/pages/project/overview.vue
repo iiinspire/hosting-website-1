@@ -77,12 +77,8 @@
 							<div class="label-1 mt-6">
 								Branch
 							</div>
-							<div class="d-flex al-c">
-								<v-icon size="18">mdi-github</v-icon>
-								<span class="ml-2">
-									{{ info.repo.defaultBranch }}
-								</span>
-							</div>
+							<e-branch></e-branch>
+							
 							<div class="mt-1">
 								<e-commit :info="info.commits"></e-commit>
 							</div>

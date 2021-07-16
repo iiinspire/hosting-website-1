@@ -1,5 +1,5 @@
 <template>
-<a v-if="href && info" :href="href" target="_blank" class="b">
+<a v-if="info && href" :href="href" target="_blank" class="b u">
 	{{ info.message }}
 </a>
 </template>
