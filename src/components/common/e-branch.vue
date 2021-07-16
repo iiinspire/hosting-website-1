@@ -1,7 +1,7 @@
 <template>
 <div class="d-flex al-c">
 	<v-icon size="18">mdi-github</v-icon>
-	<a v-if="branch" :href="href" class="ml-2 b u" target="_blank">
+	<a v-if="href" :href="href" class="ml-2 b u" target="_blank">
 		{{ branch }}
 	</a>
 </div>
@@ -14,14 +14,19 @@ export default {
 	},
 	computed: {
 		projInfo() {
-			return this.info || this.$store.state.projectInfo
+			return this.$store.state.projectInfo
 		},
 		branch() {
 			const config = this.info ? this.info.buildConfig : this.projInfo.config
 			return config.currentBranch
 		},
 		href() {
-			const { namespace, name } = this.projInfo.repo
+			if(this.info) {
+				const { prefix } = this.info.commits
+				if(prefix) return prefix + 'tree/' + this.branch
+			}
+			const { namespace, name } = this.projInfo.repo || {}
+			if(!name) return null
 			return `https://github.com/${namespace}/${name}/tree/${this.branch}`
 		},
 	}

@@ -42,8 +42,7 @@
 								<e-commit :info="it.commits"></e-commit>
 							</div>
 							<div class="fz-14 mt-1">
-								<v-icon size="14">mdi-source-branch</v-icon>
-								<span>{{ it.buildConfig.currentBranch }}</span>
+								<e-branch :info="it"></e-branch>
 							</div>
 						</div>
 						<span class="fl-r gray fz-13" v-show="!asMobile">

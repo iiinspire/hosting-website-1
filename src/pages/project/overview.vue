@@ -42,7 +42,7 @@
 					<v-col cols="12" md="6">
 						<v-img src="img/proj-bg-def.png" :height="asMobile ? 160 : 300"></v-img>
 					</v-col>
-					<v-col cols="12" md="6">
+					<v-col cols="12" md="6" class="fz-14">
 						<template v-if="info.id">
 							<div class="label-1">
 								Deployment
@@ -79,8 +79,8 @@
 							</div>
 							<e-branch></e-branch>
 							
-							<div class="mt-1">
-								<e-commit :info="info.commits"></e-commit>
+							<div class="mt-2">
+								<e-commit :info="info.latest.commits"></e-commit>
 							</div>
 						</template>
 						<v-skeleton-loader v-else type="article" />

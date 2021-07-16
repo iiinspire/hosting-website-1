@@ -85,9 +85,9 @@
 						<div class="label-1 mt-6">
 							Branch
 						</div>
-						<e-branch></e-branch>
+						<e-branch :info="info"></e-branch>
 						
-						<div class="mt-1">
+						<div class="mt-2">
 							<e-commit :info="info.commits"></e-commit>
 						</div>
 					</div>
@@ -189,9 +189,9 @@ export default {
 				}
 				this.logs = lines
 				this.goLogEnd()
-				if(this.info.projectId != this.projInfo.id) {
-					await this.$store.dispatch('getProjectInfo', this.info.projectId)
-				}
+				// if(this.info.projectId != this.projInfo.id) {
+				// 	await this.$store.dispatch('getProjectInfo', this.info.projectId)
+				// }
 			} catch (error) {
 				console.log(error)
 			}
