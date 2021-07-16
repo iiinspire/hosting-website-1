@@ -10,7 +10,10 @@
 				<span class="ml-1">{{ info.repo ? info.repo.pathPre : '--' }}</span>
 			</div>
 			<template #right>
-				<v-btn small depressed color="primary" v-if="info.id">Visit</v-btn>
+				<v-btn small depressed color="primary" @click="onVisit"
+					v-if="info.id">
+					Visit
+				</v-btn>
 			</template>
 		</e-card-head-1>
 		
@@ -121,6 +124,10 @@ export default {
 		},
 	},
 	methods: {
+		onVisit() {
+			const { domain } = this.info.latest
+			if(domain) window.open('//' + domain)
+		},
 		onView(name) {
 			const { latest } = this.info
 			let link

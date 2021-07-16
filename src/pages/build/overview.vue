@@ -40,7 +40,9 @@
 								@click="onDeploy">
 								Redeploy
 							</v-btn>
-							<v-btn color="primary" class="flex-1">Visit</v-btn>
+							<v-btn color="primary" class="flex-1" @click="onVisit">
+								Visit
+							</v-btn>
 						</div>
 					</div>
 				</v-col>
@@ -173,6 +175,10 @@ export default {
 		this.initData()
 	},
 	methods: {
+		onVisit() {
+			const { domain } = this.info
+			if(domain) window.open('//' + domain)
+		},
 		async initData() {
 			try {
 				const { data } = await this.$http.get(`/project/task/object/${this.taskId}`)

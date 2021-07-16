@@ -34,7 +34,10 @@
 					<v-btn class="mr-3" icon @click.prevent="onChart(it)">
 						<v-icon :color="$color1">mdi-file-chart-outline</v-icon>
 					</v-btn>
-					<v-btn small depressed color="primary" @click.prevent="onVisit(it)">Visit</v-btn>
+					<v-btn small depressed color="primary" :disabled="!it.production.state"
+						@click.prevent="onVisit(it)">
+						Visit
+					</v-btn>
 				</v-card-title>
 				<v-card-subtitle>
 					<div class="mt-5" style="min-height: 60px">
@@ -86,8 +89,9 @@ export default {
 		onChart() {
 			this.$notice('chart')
 		},
-		onVisit() {
-			this.$notice('visit')
+		onVisit(it) {
+			const { domain } = it.production
+			window.open('//' + domain)
 		},
 		async getList() {
 			try {
