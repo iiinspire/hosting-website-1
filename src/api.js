@@ -20,6 +20,7 @@ http.interceptors.request.use(config => {
 
 http.interceptors.response.use(res => {
 	const data = res.data
+	const { noTip } = res.config
 	if(typeof data == 'object' && data) {
 		if(data.code != 200) {
 			let msg = data.message || `${data.code} error`
@@ -29,7 +30,7 @@ http.interceptors.response.use(res => {
 				localStorage.clear()
 				router.replace('/')
 			}
-			else {
+			else if(!noTip) {
 				setTimeout(() => {
 					Vue.prototype.$alert(msg)
 				}, 10);

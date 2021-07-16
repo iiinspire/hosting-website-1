@@ -48,14 +48,14 @@
 								Deployment
 							</div>
 							<div v-if="info.latest" class="line-1">
-								<a class="u" :href="'//'+info.latest.domain" target="_blank">{{ info.latest.domain }}</a>
+								<e-domain :val="info.latest.domain"></e-domain>
 							</div>
 
 							<div class="label-1 mt-6">
 								Domains
 							</div>
 							<div v-for="(it, i) in info.domains" :key="i">
-								<a class="u" :href="'//'+info.domains[i].domain" target="_blank">{{ info.domains[i].domain }}</a>
+								<e-domain :val="info.domains[i].domain"></e-domain>
 							</div>
 
 							<div class="d-flex mt-6">

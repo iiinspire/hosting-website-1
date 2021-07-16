@@ -1,7 +1,10 @@
 <template>
 <v-card outlined>
 	<div class="pd-20">
-		<v-row>
+		<div class="pd-20 ta-c" v-if="isError">
+			<v-img src="img/building.svg" width="200" class="m-auto"></v-img>
+		</div>
+		<v-row v-else>
 			<v-col cols="12" md="5">
 				<v-skeleton-loader type="article" v-if="initLoading" />
 				<v-treeview v-else :load-children="getFiles"
@@ -42,6 +45,7 @@ export default {
 		const { taskId } = this.$route.params
 		return {
 			initLoading: true,
+			isError: false,
 			taskId,
 			dirList: [],
 			files: {
@@ -100,26 +104,31 @@ export default {
 			if(item) {
 				params.cid = item.hash
 			}
-			const { data } = await this.$http.get(`/artifact/deployment/${this.taskId}/output`, {
-				params,
-			})
-			data.forEach(it => {
-				it.id = it.hash + ',' + it.name
-				if(it.type == 'Directory') {
-					it.type = 'dir'
-					it.children = []
+			try {
+				const { data } = await this.$http.get(`/artifact/deployment/${this.taskId}/output`, {
+					params,
+					noTip: true,
+				})
+				data.forEach(it => {
+					it.id = it.hash + ',' + it.name
+					if(it.type == 'Directory') {
+						it.type = 'dir'
+						it.children = []
+					} else {
+						it.ftype = /\.(\w+)$/.exec(it.name)[1]
+					}
+				})
+				if(item) {
+					item.children.push(...data)
 				} else {
-					it.ftype = /\.(\w+)$/.exec(it.name)[1]
+					if(data.length == 1) {
+						await this.getFiles(data[0])
+					}
+					this.dirList = data
+					this.initLoading = false
 				}
-			})
-			if(item) {
-				item.children.push(...data)
-			} else {
-				if(data.length == 1) {
-					await this.getFiles(data[0])
-				}
-				this.dirList = data
-				this.initLoading = false
+			} catch (error) {
+				this.isError = true
 			}
 		},
 	}

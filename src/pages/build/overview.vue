@@ -28,8 +28,13 @@
 		<div class="pd-20">
 			<v-row class="pos-r">
 				<v-col cols="12" md="4">
-					<div class="bd-1 bdrs-5">
+					<div class="bd-1 bdrs-5 pos-r">
 						<v-img src="img/proj-bg-def.png" height="220px"></v-img>
+						<v-progress-circular class="pos-center" v-if="isRunning"
+							:size="50"
+							color="primary"
+							indeterminate
+							></v-progress-circular>
 					</div>
 
 					<div class="mt-5" v-if="logs.length">
@@ -40,7 +45,7 @@
 								@click="onDeploy">
 								Redeploy
 							</v-btn>
-							<v-btn color="primary" class="flex-1" @click="onVisit">
+							<v-btn :disabled="!isSuccess" color="primary" class="flex-1" @click="onVisit">
 								Visit
 							</v-btn>
 						</div>
@@ -79,7 +84,7 @@
 
 						<div class="label-1 mt-6">Domains</div>
 						<div>
-							<a :href="'//'+info.domain" class="u" target="_blank">{{ info.domain }}</a>
+							<e-domain :val="info.domain" :disabled="!isSuccess"></e-domain>
 						</div>
 
 						<div class="label-1 mt-6">
@@ -142,6 +147,9 @@ export default {
 		},
 		isRunning() {
 			return this.state == 'running'
+		},
+		isSuccess() {
+			return this.state == 'success'
 		},
 	},
 	data() {
