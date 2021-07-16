@@ -54,7 +54,7 @@
 								<div class="label-1">Status</div>
 								<div>
 									<span class="dot-1" :class="'c-'+state"></span>
-									<span class="color-1" :class="'c-'+state">{{ state.capitalize() }}</span>
+									<span class="sta-1" :class="'c-'+state">{{ state.capitalize() }}</span>
 								</div>
 							</div>
 							<div class="flex-1">
@@ -64,11 +64,11 @@
 							<div class="flex-1">
 								<div class="label-1">Duration</div>
 								<div>
-									<e-time :endAt="info.endAt">{{ info.createAt }}</e-time>
+									<e-time :endAt="info.endAt || nowDate">{{ info.createAt }}</e-time>
 								</div>
 							</div>
 							<div class="flex-1">
-								<div class="label-1">Age</div>
+								<div class="label-1">Created</div>
 								<div>
 									<e-time>{{ info.createAt }}</e-time>
 								</div>
@@ -77,7 +77,7 @@
 
 						<div class="label-1 mt-6">Domains</div>
 						<div>
-							{{ info.buildConfig.name }}.4verland.app
+							<a :href="'//'+info.domain" class="u" target="_blank">{{ info.domain }}</a>
 						</div>
 
 						<div class="label-1 mt-6">
@@ -130,6 +130,7 @@ export default {
 	computed: {
 		...mapState({
 			buildInfo: s => s.buildInfo,
+			nowDate: s => s.nowDate,
 		}),
 		asMobile() {
 			return this.$vuetify.breakpoint.smAndDown
@@ -200,7 +201,7 @@ export default {
 					confirmText: 'Redeploy',
 				})
 				this.deploying = true
-				const { data } = await this.$http.post(`/project/${this.projName}/build`)
+				const { data } = await this.$http.post(`/project/${this.info.projectId}/build`)
 				this.$router.replace(`/build/${this.projName}/${data.taskId}/overview`)
 			} catch (error) {
 				console.log(error, 'build err')

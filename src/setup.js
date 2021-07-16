@@ -15,6 +15,11 @@ Vue.prototype.$sleep = (msec = 300) => {
 	})
 }
 
+Vue.prototype.$navTo = (url) => {
+	if(/^https?:/.test(url)) location.href = url
+	else Vue.prototype.$router.push(url)
+}
+
 Vue.prototype.$getFramework = name => {
 	let obj = frameworks.filter(it => it.slug == name)[0]
 	if(!obj) {

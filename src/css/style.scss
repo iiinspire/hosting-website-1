@@ -39,6 +39,9 @@ body {
 }
 a {
 	text-decoration: none;
+	&.u:hover {
+		text-decoration: underline;
+	}
 }
 .v-main {
 	background: linear-gradient(90deg, #fff, #e0e7f2 10%,#fff 70%, #f7ecec);
@@ -107,7 +110,7 @@ $bdcolor: #E6E8EB;
 	margin-right: 5px;
 	padding: 3px;
 	border-radius: 100px;
-	background: #4A96FA;
+	background: #f3a536;
 	&.c-success {
 		background: #69C07E;
 	}
@@ -115,7 +118,8 @@ $bdcolor: #E6E8EB;
 		background: #E43D3D;
 	}
 }
-.color-1 {
+.sta-1 {
+	color: #f3a536;
 	&.c-success { color: #69C07E; }
 	&.c-failure, &.c-error { color: #E43D3D; }
 }

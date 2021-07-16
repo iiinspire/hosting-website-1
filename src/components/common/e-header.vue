@@ -80,6 +80,7 @@ export default {
 				{
 					label: 'Feedback',
 					icon: 'message-processing-outline',
+					name: 'feedback',
 				},
 				{
 					label: 'Changelog',
@@ -124,8 +125,15 @@ export default {
 	},
 	methods: {
 		onMenu(it) {
-			console.log(it)
-			this.$notice(it.label)
+			const { link, name } = it
+			if(link) {
+				this.$navTo(link)
+				return
+			}
+			if(name == 'feedback') {
+				this.$prompt('Share any feedback about our propucts and services.', 'Feedback')
+			}
+			// this.$notice(it.label)
 		},
 	},
 }

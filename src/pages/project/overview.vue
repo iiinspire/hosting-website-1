@@ -37,26 +37,30 @@
 			<div class="mt-5" :class="asMobile ? 'bdt-1 pt-5' : 'bd-1 pd-15'">
 				<v-row>
 					<v-col cols="12" md="6">
-						<v-img src="img/proj-bg-def.png" height="300"></v-img>
+						<v-img src="img/proj-bg-def.png" :height="asMobile ? 160 : 300"></v-img>
 					</v-col>
 					<v-col cols="12" md="6">
 						<template v-if="info.id">
 							<div class="label-1">
 								Deployment
 							</div>
-							<div>{{ domain }}</div>
+							<div v-if="info.latest" class="line-1">
+								<a class="u" :href="'//'+info.latest.domain" target="_blank">{{ info.latest.domain }}</a>
+							</div>
 
 							<div class="label-1 mt-6">
 								Domains
 							</div>
-							<div>{{ domain }}</div>
+							<div v-for="(it, i) in info.domains" :key="i">
+								<a class="u" :href="'//'+info.domains[i].domain" target="_blank">{{ info.domains[i].domain }}</a>
+							</div>
 
 							<div class="d-flex mt-6">
 								<div class="flex-1">
 									<div class="label-1">State</div>
 									<div >
 										<span class="dot-1" :class="'c-'+state"></span>
-										<span class="color-1" :class="'c-'+state">{{ state.capitalize() }}</span>
+										<span class="sta-1" :class="'c-'+state">{{ state.capitalize() }}</span>
 									</div>
 								</div>
 								<div class="flex-1">
@@ -76,6 +80,9 @@
 									{{ info.repo.defaultBranch }}
 								</span>
 							</div>
+							<!-- <div class="gray mt-1">
+								{{ info.commits.message }}
+							</div> -->
 						</template>
 						<v-skeleton-loader v-else type="article" />
 					</v-col>
@@ -109,16 +116,16 @@ export default {
 			return `${this.info.name}.4everland.app`
 		},
 		state() {
-			const { state='Wait' } = this.info.lastBuild || {}
+			const { state='Wait' } = this.info.latest || {}
 			return state.toLowerCase()
 		},
 	},
 	methods: {
 		onView(name) {
-			const { lastBuild } = this.info
+			const { latest } = this.info
 			let link
 			if(name == 'log') {
-				link = `/build/${this.info.name}/${lastBuild.taskId}/overview`
+				link = `/build/${this.info.name}/${latest.taskId}/overview`
 			} 
 			else if(name == 'domain') {
 				link = `/project/${this.id}/settings?tab=1`
