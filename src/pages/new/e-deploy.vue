@@ -234,7 +234,7 @@ export default {
 				const { data } = await this.$http.post('/project', body)
 				const projId = data.projectId
 				const { data: {taskId} } = await this.$http.post(`/project/${projId}/build`)
-				await this.$alert('Project created successfully')
+				// await this.$alert('Project created successfully')
 				this.$router.replace(`/build/${projId}/${taskId}/overview`)
 			} catch (error) {
 				// 

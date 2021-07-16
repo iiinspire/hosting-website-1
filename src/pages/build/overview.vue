@@ -32,7 +32,7 @@
 						<v-img src="img/proj-bg-def.png" height="220px"></v-img>
 						<v-progress-circular class="pos-center" v-if="isRunning"
 							:size="50"
-							color="primary"
+							color="#f3a536"
 							indeterminate
 							></v-progress-circular>
 					</div>
