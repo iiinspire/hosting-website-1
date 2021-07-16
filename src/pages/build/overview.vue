@@ -59,10 +59,7 @@
 						<div class="d-flex">
 							<div class="flex-1">
 								<div class="label-1">Status</div>
-								<div>
-									<span class="dot-1" :class="'c-'+state"></span>
-									<span class="sta-1" :class="'c-'+state">{{ state.capitalize() }}</span>
-								</div>
+								<e-status :val="state"></e-status>
 							</div>
 							<div class="flex-1">
 								<div class="label-1">Environment</div>

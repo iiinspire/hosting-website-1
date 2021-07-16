@@ -7,7 +7,7 @@
 			</div>
 		</e-card-head-1>
 		
-		<div class="pd-20">
+		<div class="pd-20 fz-14">
 			<div class="bd-1 bdrs-5">
 				<v-skeleton-loader v-if="!list" type="article" />
 
@@ -30,22 +30,23 @@
 							</div>
 						</div>
 						<div class="ml-5">
-							<div class="gray">{{ it.state }}</div>
-							<div class="mt-1 fz-13">
+							<e-status :val="it.state"></e-status>
+							<div class="mt-1">
 								<e-time>{{ it.createAt }}</e-time>
 							</div>
 						</div>
 					</div>
 					<div class="d-flex al-c flex-1">
-						<div class="flex-1 mr-5" v-if="it.commits">
-							<div>
+						<div class="flex-1 mr-5 shrink-1"
+							v-if="it.commits">
+							<div class="line-1" style="max-width: 250px;">
 								<e-commit :info="it.commits"></e-commit>
 							</div>
 							<div class="fz-14 mt-1">
 								<e-branch :info="it"></e-branch>
 							</div>
 						</div>
-						<span class="fl-r gray fz-13" v-show="!asMobile">
+						<span class="fl-r gray fz-13 shrink-0" v-show="!asMobile">
 							<e-time :value="it.createAt" :sub="'by '+userInfo.username"></e-time>
 						</span>
 						<v-menu>
