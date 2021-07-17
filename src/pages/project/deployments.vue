@@ -15,8 +15,8 @@
 					empty
 				</div>
 
-				<div class="bdb-1 pd-20" :class="{
-					'bdb-1': i < 3,
+				<div class="pd-20" :class="{
+					'bdb-1': i < list.length - 1,
 					'd-flex al-c flex-wrap': !asMobile,
 				}"
 					v-for="(it, i) in list" :key="i">
@@ -32,7 +32,7 @@
 						<div class="ml-5">
 							<e-status :val="it.state"></e-status>
 							<div class="mt-1">
-								<e-time>{{ it.createAt }}</e-time>
+								<e-time :endAt="it.endAt">{{ it.createAt }}</e-time>
 							</div>
 						</div>
 					</div>
