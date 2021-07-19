@@ -35,7 +35,22 @@ export default {
 			return this.$store.state.projectInfo
 		},
 	},
+	mounted() {
+		this.getList()
+	},
 	methods: {
+		async getList() {
+			try {
+				const { data } = await this.$http.get('/domain/list', {
+					params: {
+						projectId: this.info.id,
+					},
+				})
+				console.log(data)
+			} catch (error) {
+				console.log(error)
+			}
+		},
 		async onAdd() {
 			try {
 				if(!/(\w+\.)+\w{2,10}/.test(this.domain)) {
