@@ -37,7 +37,7 @@
 							></v-progress-circular>
 					</div>
 
-					<div class="mt-5" v-if="logs.length">
+					<div class="mt-5">
 						<div class="d-flex build-btn-wrap">
 							<!-- :disabled="isRunning" -->
 							<v-btn color="error" class="flex-1 mr-5" 

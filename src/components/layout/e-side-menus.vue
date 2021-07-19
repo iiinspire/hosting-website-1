@@ -8,7 +8,9 @@
 				{{ it.text }}
 			</v-expansion-panel-header>
 			<v-expansion-panel-content>
-				<component :is="it.comp" :info="info" v-if="it.comp && info.id"></component>
+				<component :is="it.comp" :info="info" 
+					:active="i == curIdx"
+					v-if="it.comp && info.id"></component>
 			</v-expansion-panel-content>
 		</v-expansion-panel>
 	</v-expansion-panels>
@@ -33,6 +35,7 @@
 	</div>
 	<div class="flex-1 pd-20" v-if="info.id">
 		<component :is="it.comp" :info="info" 
+			:active="curItem.comp == it.comp"
 			v-show="curItem.comp == it.comp"
 			v-for="(it, i) in list" :key="i"></component>
 	</div>
