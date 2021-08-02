@@ -10,7 +10,7 @@ npm install
 npm run serve
 ```
 
-### Compiles and minifies for production111
+### Compiles and minifies for production111date08.02
 ```111
 npm run build
 ```
